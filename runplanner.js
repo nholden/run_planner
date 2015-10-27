@@ -8,6 +8,23 @@ function buildLocationForm () {
   zipCodeInput.placeholder = "Zip code";
   locationForm.appendChild(zipCodeInput);
 
+  var timeSelect = document.createElement("select");
+  timeSelect.id = "time";
+  locationForm.appendChild(timeSelect);
+
+  var now = new Date();
+  var nowOption = document.createElement("option");
+  nowOption.value = "now";
+  nowOption.textContent = "Now";
+  timeSelect.appendChild(nowOption);
+
+  next24Hours(now).forEach(function(hour) {
+    var hourOption = document.createElement("option");
+    hourOption.value = hour.getTime();
+    hourOption.textContent = hour12Format(hour);
+    timeSelect.appendChild(hourOption);
+  });
+
   var locationSubmit = document.createElement("button");
   locationSubmit.type = "submit";
   locationSubmit.textContent = "Set location";
@@ -38,6 +55,46 @@ function buildLocationForm () {
   var clothesDiv = document.createElement("div");
   document.body.appendChild(clothesDiv);
 }
+
+/** 
+ * given a date object, rounds down to the nearest hour and
+ * returns an array of date objects for the next 24 hours
+ */
+function next24Hours(date) {
+  date.setMinutes(0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+  var next24Hours = [];
+  for (var i = 1; i < 25; i++) {
+    next24Hours.push(new Date(date.getTime() + (3600000 * i)));
+  }
+
+  return next24Hours;
+}
+
+// given a date object, return a string with the hour in 12-hour format
+function hour12Format(date) {
+  var now = new Date();
+  var hour12Format = "";
+  if (date.getHours() == 0) {
+    hour12Format += "Midnight";
+  } else if (date.getHours() < 12) {
+    hour12Format += date.getHours() + " A.M.";
+  } else if (date.getHours() == 12) {
+    hour12Format += "Noon";
+  } else {
+    hour12Format += date.getHours() - 12 + " P.M.";
+  }
+
+  if (date.getDay() == now.getDay()) {
+    hour12Format += " today";
+  } else if (date.getDay() == now.getDay() + 1 || 
+             date.getDay() < now.getDay()) {
+    hour12Format += " tomorrow";
+  }
+
+  return hour12Format;
+} 
 
 // given a US zip code, returns object with temp, cond, and wind properties
 function currentWeather(zipCode) {
