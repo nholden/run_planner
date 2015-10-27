@@ -20,13 +20,23 @@ function buildLocationForm () {
                              "<br>Temperature: " + weather.temp + "&deg;F" +
                              "<br>Conditions: " + weather.cond +
                              "<br>Wind speed: " + weather.wind + " mph";
+      var clothes = recommendClothes(weather);
+      var clothesHTML = "";
+      for (var bodyPart in clothes) {
+        clothesHTML += "<br>Wear " + clothes[bodyPart] + " on your " + bodyPart + ".";
+      }
+      clothesDiv.innerHTML = "Clothing recommendations" + clothesHTML;
     } catch(err) {
       weatherDiv.textContent = err;
+      clothesDiv.textContent = null;
     }
   });
 
   var weatherDiv = document.createElement("div");
   document.body.appendChild(weatherDiv);
+
+  var clothesDiv = document.createElement("div");
+  document.body.appendChild(clothesDiv);
 }
 
 // given a US zip code, returns object with temp, cond, and wind properties
@@ -50,6 +60,33 @@ function currentWeather(zipCode) {
   } else {
     throw req.statusText;
   }
+}
+
+// given a weather object, returns an object with body parts as keys and clothing as values
+function recommendClothes(weather) {
+  var clothes = {};
+  if (weather.temp <= 15) {
+    clothes.torso = "heavy jacket";
+    clothes.legs = "tights";
+    clothes.hands = "gloves";
+    clothes.head = "hat";
+  } else if (weather.temp <= 25) {
+    clothes.torso = "light jacket";
+    clothes.legs = "tights";
+    clothes:hands = "gloves";
+    clothes.head = "hat";
+  } else if (weather.temp <= 35) {
+    clothes.torso = "light jacket";
+    clothes.legs = "tights";
+    clothes.hands = "gloves";
+  } else if (weather.temp <= 45) {
+    clothes.torso = "long-sleeve shirt";
+    clothes.legs = "shorts"
+  } else {
+    clothes.torso = "short-sleeve shirt";
+    clothes.legs = "shorts";
+  }
+  return clothes;
 }
 
 buildLocationForm();
