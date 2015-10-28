@@ -40,7 +40,8 @@ function buildLocationForm () {
       var clothes = recommendClothes(weather);
       var clothesHTML = "";
       for (var bodyPart in clothes) {
-        clothesHTML += "<br>Wear " + clothes[bodyPart] + " on your " + bodyPart + ".";
+        clothesHTML += "<br>Wear " + clothes[bodyPart] + " on your " 
+                       + bodyPart + ".";
       }
       clothesDiv.innerHTML = "Clothing recommendations" + clothesHTML;
     } catch(err) {
@@ -72,7 +73,10 @@ function next24Hours(date) {
   return next24Hours;
 }
 
-// given a date object, return a string with the hour in 12-hour format
+/** 
+ * given a date object, return a string with
+ * the hour in 12-hour format
+ */
 function hour12Format(date) {
   var now = new Date();
   var hour12Format = "";
@@ -96,11 +100,17 @@ function hour12Format(date) {
   return hour12Format;
 } 
 
-// given a US zip code, returns object with temp, cond, and wind properties
+var weatherApiRootUrl = "http://api.openweathermap.org/data/2.5/";
+var weatherApiKey = "e3f7ff8b1714bf3efa20664e097b5387";
+
+/**
+ * given a US zip code, returns an object with 
+ * temp, cond, and wind properties
+ */
 function currentWeather(zipCode) {
   var req = new XMLHttpRequest();
-  req.open("GET", "http://api.openweathermap.org/data/2.5/weather?zip=" + zipCode +
-           ",us&units=imperial&APPID=e3f7ff8b1714bf3efa20664e097b5387", false);
+  req.open("GET", weatherApiRootUrl + "weather?zip=" + zipCode +
+           ",us&units=imperial&APPID=" + weatherApiKey, false);
   req.send(null);
   if (req.status == 200) {
     var data = JSON.parse(req.responseText);
@@ -119,7 +129,10 @@ function currentWeather(zipCode) {
   }
 }
 
-// given a weather object, returns an object with body parts as keys and clothing as values
+/**
+ * given a weather object, returns an object with
+ * body parts as keys and clothing as values
+ */
 function recommendClothes(weather) {
   var clothes = {};
   if (weather.temp <= 15) {
