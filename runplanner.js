@@ -1,4 +1,4 @@
-function buildLocationForm () {
+function buildLocationForm() {
   var locationForm = document.createElement("form");
   document.body.appendChild(locationForm);
  
@@ -104,8 +104,8 @@ var weatherApiRootUrl = "http://api.openweathermap.org/data/2.5/";
 var weatherApiKey = "e3f7ff8b1714bf3efa20664e097b5387";
 
 /**
- * given a US zip code, returns an object with 
- * temp, cond, and wind properties
+ * given a US zip code, returns an object with temp,
+ * cond, and wind properties for current weather
  */
 function currentWeather(zipCode) {
   var req = new XMLHttpRequest();
@@ -119,6 +119,40 @@ function currentWeather(zipCode) {
         temp: Math.round(data.main.temp),
         cond: data.weather[0].main,
         wind: data.wind.speed
+      };
+      return weather;
+    } else {
+      throw data.message;
+    }
+  } else {
+    throw req.statusText;
+  }
+}
+
+/**
+ * given a US zip code and a unix time (UTC), returns an object
+ * with time and forecasted temp, cond, and wind properties
+ */
+function forecastedWeather(zipCode, time) {
+  var req = new XMLHttpRequest();
+  req.open("GET", weatherApiRootUrl + "forecast?zip=" + zipCode +
+           ",us&units=imperial&APPID=" + weatherApiKey, false);
+  req.send(null);
+  if (req.status == 200) {
+    var data = JSON.parse(req.responseText);
+    if (data.cod == 200) {
+      var closestForecast;
+      data.list.forEach(function(forecast) {
+        if (!closestForecast || Math.abs(forecast.dt - time) 
+            < Math.abs(closestForecast.dt - time)) {
+          closestForeast = forecast;
+        } 
+      });
+      var weather = {
+        time: closestForecast.dt,
+        temp: Math.round(closestForecast.main.temp),
+        cond: closestForecast.weather[0].main,
+        wind: closestForecast.wind.speed
       };
       return weather;
     } else {
