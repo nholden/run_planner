@@ -32,7 +32,11 @@ function buildLocationForm() {
   locationSubmit.addEventListener("click", function(event) {
     event.preventDefault();
     try {
-      var weather = currentWeather(zipCodeInput.value);
+      if (timeSelect.value == "now") {
+        var weather = currentWeather(zipCodeInput.value);
+      } else {
+        var weather = forecastedWeather(zipCodeInput.value, timeSelect.value);
+      }
       weatherDiv.innerHTML = "Weather in zip code " + zipCodeInput.value +
                              "<br>Temperature: " + weather.temp + "&deg;F" +
                              "<br>Conditions: " + weather.cond +
@@ -142,14 +146,14 @@ function forecastedWeather(zipCode, time) {
     var data = JSON.parse(req.responseText);
     if (data.cod == 200) {
       var closestForecast;
+      time = time/1000;
       data.list.forEach(function(forecast) {
-        if (!closestForecast || Math.abs(forecast.dt - time) 
-            < Math.abs(closestForecast.dt - time)) {
-          closestForeast = forecast;
+        if (!closestForecast || Math.abs(forecast.dt - time) < Math.abs(closestForecast.dt - time)) {
+          closestForecast = forecast;
         } 
       });
       var weather = {
-        time: closestForecast.dt,
+        time: closestForecast.dt * 1000,
         temp: Math.round(closestForecast.main.temp),
         cond: closestForecast.weather[0].main,
         wind: closestForecast.wind.speed
