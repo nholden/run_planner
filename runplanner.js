@@ -1,6 +1,10 @@
 function buildLocationForm() {
+  var container = document.createElement("div");
+  container.id = "container";
+  document.body.appendChild(container);
+ 
   var locationForm = document.createElement("form");
-  document.body.appendChild(locationForm);
+  container.appendChild(locationForm);
  
   var zipCodeInput = document.createElement("input");
   zipCodeInput.type = "text";
@@ -25,11 +29,12 @@ function buildLocationForm() {
     timeSelect.appendChild(hourOption);
   });
 
-  var locationSubmit = document.createElement("button");
-  locationSubmit.type = "submit";
-  locationSubmit.textContent = "Set location";
-  locationForm.appendChild(locationSubmit);
-  locationSubmit.addEventListener("click", function(event) {
+  var submit = document.createElement("button");
+  submit.type = "submit";
+  submit.textContent = "Set location";
+  submit.id = "submit";
+  locationForm.appendChild(submit);
+  submit.addEventListener("click", function(event) {
     event.preventDefault();
     try {
       if (timeSelect.value == "now") {
@@ -55,10 +60,10 @@ function buildLocationForm() {
   });
 
   var weatherDiv = document.createElement("div");
-  document.body.appendChild(weatherDiv);
+  container.appendChild(weatherDiv);
 
   var clothesDiv = document.createElement("div");
-  document.body.appendChild(clothesDiv);
+  container.appendChild(clothesDiv);
 }
 
 /** 
