@@ -109,8 +109,7 @@ function hour12Format(date) {
   return hour12Format;
 } 
 
-var weatherApiRootUrl = "http://api.openweathermap.org/data/2.5/";
-var weatherApiKey = "e3f7ff8b1714bf3efa20664e097b5387";
+var weatherApiRootUrl = "http://api.wunderground.com/api/585c642644dd880e/";
 
 /**
  * given a US zip code, returns an object with temp,
@@ -118,20 +117,20 @@ var weatherApiKey = "e3f7ff8b1714bf3efa20664e097b5387";
  */
 function currentWeather(zipCode) {
   var req = new XMLHttpRequest();
-  req.open("GET", weatherApiRootUrl + "weather?zip=" + zipCode +
-           ",us&units=imperial&APPID=" + weatherApiKey, false);
+  req.open("GET", weatherApiRootUrl + "conditions/q/"
+           + zipCode + "/q.json", false);
   req.send(null);
   if (req.status == 200) {
     var data = JSON.parse(req.responseText);
-    if (data.cod == 200) {
+    if (data.current_observation) {
       var weather = {
-        temp: Math.round(data.main.temp),
-        cond: data.weather[0].main,
-        wind: data.wind.speed
+        temp: data.current_observation.temp_f,
+        cond: data.current_observation.weather,
+        wind: data.current_observation.wind_mph
       };
       return weather;
     } else {
-      throw data.message;
+      throw data.response.error.description;
     }
   } else {
     throw req.statusText;
@@ -144,28 +143,28 @@ function currentWeather(zipCode) {
  */
 function forecastedWeather(zipCode, time) {
   var req = new XMLHttpRequest();
-  req.open("GET", weatherApiRootUrl + "forecast?zip=" + zipCode +
-           ",us&units=imperial&APPID=" + weatherApiKey, false);
+  req.open("GET", weatherApiRootUrl + "hourly/q/"
+           + zipCode + "/q.json", false);
   req.send(null);
   if (req.status == 200) {
     var data = JSON.parse(req.responseText);
-    if (data.cod == 200) {
-      var closestForecast;
+    if (data.hourly_forecast) {
       time = time/1000;
-      data.list.forEach(function(forecast) {
-        if (!closestForecast || Math.abs(forecast.dt - time) < Math.abs(closestForecast.dt - time)) {
-          closestForecast = forecast;
+      var forecast;
+      data.hourly_forecast.forEach(function(hourlyForecast) {
+        if (hourlyForecast.FCTTIME.epoch == time) {
+          forecast = hourlyForecast;
         } 
       });
       var weather = {
-        time: closestForecast.dt * 1000,
-        temp: Math.round(closestForecast.main.temp),
-        cond: closestForecast.weather[0].main,
-        wind: closestForecast.wind.speed
+        time: forecast.FCTTIME.pretty,
+        temp: forecast.temp.english,
+        cond: forecast.condition,
+        wind: forecast.wspd.english
       };
       return weather;
     } else {
-      throw data.message;
+      throw data.response.error.description;
     }
   } else {
     throw req.statusText;
