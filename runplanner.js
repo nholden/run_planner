@@ -12,23 +12,6 @@ function buildLocationForm() {
   zipCodeInput.placeholder = "Zip code";
   locationForm.appendChild(zipCodeInput);
 
-  var timeSelect = document.createElement("select");
-  timeSelect.id = "time";
-  locationForm.appendChild(timeSelect);
-
-  var now = new Date();
-  var nowOption = document.createElement("option");
-  nowOption.value = "now";
-  nowOption.textContent = "Now";
-  timeSelect.appendChild(nowOption);
-
-  next24Hours(now).forEach(function(hour) {
-    var hourOption = document.createElement("option");
-    hourOption.value = hour.getTime();
-    hourOption.textContent = hour12Format(hour);
-    timeSelect.appendChild(hourOption);
-  });
-
   var submit = document.createElement("button");
   submit.type = "submit";
   submit.textContent = "Set location";
@@ -57,6 +40,23 @@ function buildLocationForm() {
       weatherDiv.textContent = err;
       clothesDiv.textContent = null;
     }
+  });
+
+  var timeSelect = document.createElement("select");
+  timeSelect.id = "time";
+  locationForm.appendChild(timeSelect);
+
+  var now = new Date();
+  var nowOption = document.createElement("option");
+  nowOption.value = "now";
+  nowOption.textContent = "Now";
+  timeSelect.appendChild(nowOption);
+
+  next24Hours(now).forEach(function(hour) {
+    var hourOption = document.createElement("option");
+    hourOption.value = hour.getTime();
+    hourOption.textContent = hour12Format(hour);
+    timeSelect.appendChild(hourOption);
   });
 
   var weatherDiv = document.createElement("div");
