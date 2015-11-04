@@ -2,6 +2,14 @@ function buildLocationForm() {
   var container = document.createElement("div");
   container.id = "container";
   document.body.appendChild(container);
+
+  var locationDisplay = document.createElement("div");
+  locationDisplay.id = "locationDisplay";
+  locationDisplay.textContent = "Running in ";
+  container.appendChild(locationDisplay);
+  var cityLink = document.createElement("a");
+  cityLink.href = "";
+  locationDisplay.appendChild(cityLink);
  
   var locationForm = document.createElement("form");
   container.appendChild(locationForm);
@@ -25,6 +33,10 @@ function buildLocationForm() {
       } else {
         var weather = forecastedWeather(zipCodeInput.value, timeSelect.value);
       }
+      cityLink.textContent = weather.city;
+      locationDisplay.style.display = "block";
+      zipCodeInput.style.display = "none";
+      submit.style.display = "none";
       weatherDiv.innerHTML = "Weather in zip code " + zipCodeInput.value +
                              "<br>Temperature: " + weather.temp + "&deg;F" +
                              "<br>Conditions: " + weather.cond +
@@ -112,8 +124,8 @@ function hour12Format(date) {
 var weatherApiRootUrl = "http://api.wunderground.com/api/585c642644dd880e/";
 
 /**
- * given a US zip code, returns an object with temp,
- * cond, and wind properties for current weather
+ * given a US zip code, returns an object with city and
+ * temp, cond, and wind properties for current weather
  */
 function currentWeather(zipCode) {
   var req = new XMLHttpRequest();
@@ -124,6 +136,7 @@ function currentWeather(zipCode) {
     var data = JSON.parse(req.responseText);
     if (data.current_observation) {
       var weather = {
+        city: data.current_observation.display_location.city,
         temp: data.current_observation.temp_f,
         cond: data.current_observation.weather,
         wind: data.current_observation.wind_mph
