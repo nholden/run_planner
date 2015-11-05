@@ -27,17 +27,30 @@ function buildLocationForm() {
   locationForm.appendChild(submit);
   submit.addEventListener("click", function(event) {
     event.preventDefault();
+    zipCodeInput.style.display = "none";
+    submit.style.display = "none";
+    locationDisplay.style.display = "block";
+    timeSelect.style.display = "block";
+    updateWeather();
+  });
+
+  var timeSelect = document.createElement("select");
+  timeSelect.id = "time";
+  locationForm.appendChild(timeSelect);
+  timeSelect.addEventListener("change", function() {
+    updateWeather();
+  });
+
+  function updateWeather() {
     try {
       if (timeSelect.value == "now") {
-        var weather = currentWeather(zipCodeInput.value);
+        var weather = getWeather(zipCodeInput.value);
       } else {
-        var weather = forecastedWeather(zipCodeInput.value, timeSelect.value);
-      }
+        var weather = getWeather(zipCodeInput.value, timeSelect.value);
+      } 
       cityLink.textContent = weather.city;
-      locationDisplay.style.display = "block";
-      zipCodeInput.style.display = "none";
-      submit.style.display = "none";
       weatherDiv.innerHTML = "Weather in zip code " + zipCodeInput.value +
+                             "<br>" + weather.time +
                              "<br>Temperature: " + weather.temp + "&deg;F" +
                              "<br>Conditions: " + weather.cond +
                              "<br>Wind speed: " + weather.wind + " mph";
@@ -52,11 +65,8 @@ function buildLocationForm() {
       weatherDiv.textContent = err;
       clothesDiv.textContent = null;
     }
-  });
-
-  var timeSelect = document.createElement("select");
-  timeSelect.id = "time";
-  locationForm.appendChild(timeSelect);
+  }
+  
 
   var now = new Date();
   var nowOption = document.createElement("option");
@@ -124,61 +134,50 @@ function hour12Format(date) {
 var weatherApiRootUrl = "http://api.wunderground.com/api/585c642644dd880e/";
 
 /**
- * given a US zip code, returns an object with city and
- * temp, cond, and wind properties for current weather
+ * Given a US zip code and a unix time (UTC), returns an object
+ * with city, time and forecasted temp, cond, and wind properties. 
+ * If time is undefined, returns the current conditions.
  */
-function currentWeather(zipCode) {
+function getWeather(zipCode, time) {
   var req = new XMLHttpRequest();
-  req.open("GET", weatherApiRootUrl + "conditions/q/"
+  req.open("GET", weatherApiRootUrl + "conditions/hourly/q/"
            + zipCode + "/q.json", false);
   req.send(null);
   if (req.status == 200) {
-    var data = JSON.parse(req.responseText);
-    if (data.current_observation) {
-      var weather = {
-        city: data.current_observation.display_location.city,
-        temp: data.current_observation.temp_f,
-        cond: data.current_observation.weather,
-        wind: data.current_observation.wind_mph
-      };
-      return weather;
+    var data = JSON.parse(req.responseText), weather;
+    if (time) {
+      if (data.hourly_forecast) {
+        time = time/1000;
+        var forecast;
+        data.hourly_forecast.forEach(function(hourlyForecast) {
+          if (hourlyForecast.FCTTIME.epoch == time) {
+            forecast = hourlyForecast;
+          } 
+        });
+        weather = {
+          city: data.current_observation.display_location.city,
+          time: forecast.FCTTIME.pretty,
+          temp: forecast.temp.english,
+          cond: forecast.condition,
+          wind: forecast.wspd.english
+        };
+      } else {
+        throw data.response.error.description;
+      }
     } else {
-      throw data.response.error.description;
+      if (data.current_observation) {
+        weather = {
+          city: data.current_observation.display_location.city,
+          time: data.current_observation.observation_time,
+          temp: data.current_observation.temp_f,
+          cond: data.current_observation.weather,
+          wind: data.current_observation.wind_mph
+        };
+      } else {
+        throw data.response.error.description;
+      }
     }
-  } else {
-    throw req.statusText;
-  }
-}
-
-/**
- * given a US zip code and a unix time (UTC), returns an object
- * with time and forecasted temp, cond, and wind properties
- */
-function forecastedWeather(zipCode, time) {
-  var req = new XMLHttpRequest();
-  req.open("GET", weatherApiRootUrl + "hourly/q/"
-           + zipCode + "/q.json", false);
-  req.send(null);
-  if (req.status == 200) {
-    var data = JSON.parse(req.responseText);
-    if (data.hourly_forecast) {
-      time = time/1000;
-      var forecast;
-      data.hourly_forecast.forEach(function(hourlyForecast) {
-        if (hourlyForecast.FCTTIME.epoch == time) {
-          forecast = hourlyForecast;
-        } 
-      });
-      var weather = {
-        time: forecast.FCTTIME.pretty,
-        temp: forecast.temp.english,
-        cond: forecast.condition,
-        wind: forecast.wspd.english
-      };
-      return weather;
-    } else {
-      throw data.response.error.description;
-    }
+    return weather;
   } else {
     throw req.statusText;
   }
