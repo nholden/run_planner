@@ -1,3 +1,5 @@
+var weatherInZip;
+
 function buildLocationForm() {
   var container = document.createElement("div");
   container.id = "container";
@@ -43,11 +45,10 @@ function buildLocationForm() {
 
   function updateWeather() {
     try {
-      if (timeSelect.value == "now") {
-        var weather = getWeather(zipCodeInput.value);
-      } else {
-        var weather = getWeather(zipCodeInput.value, timeSelect.value);
-      } 
+      if (!weatherInZip) {
+        weatherInZip = getWeatherInZip(zipCodeInput.value);
+      }
+      var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
       cityLink.textContent = weather.city;
       weatherDiv.innerHTML = "Weather in zip code " + zipCodeInput.value +
                              "<br>" + weather.time +
@@ -67,14 +68,12 @@ function buildLocationForm() {
     }
   }
   
-
-  var now = new Date();
   var nowOption = document.createElement("option");
-  nowOption.value = "now";
   nowOption.textContent = "Now";
+  nowOption.value = "now";
   timeSelect.appendChild(nowOption);
 
-  next24Hours(now).forEach(function(hour) {
+  next24Hours(new Date).forEach(function(hour) {
     var hourOption = document.createElement("option");
     hourOption.value = hour.getTime();
     hourOption.textContent = hour12Format(hour);
@@ -131,56 +130,62 @@ function hour12Format(date) {
   return hour12Format;
 } 
 
-var weatherApiRootUrl = "http://api.wunderground.com/api/585c642644dd880e/";
-
 /**
- * Given a US zip code and a unix time (UTC), returns an object
- * with city, time and forecasted temp, cond, and wind properties. 
- * If time is undefined, returns the current conditions.
+ * Given a US zip code, queries the weather API for current
+ * conditions and hourly forecasts, parses that data and 
+ * returns an object with that data.
  */
-function getWeather(zipCode, time) {
+function getWeatherInZip(zipCode) {
+  var weatherApiRootUrl = "http://api.wunderground.com/api/585c642644dd880e/";
   var req = new XMLHttpRequest();
   req.open("GET", weatherApiRootUrl + "conditions/hourly/q/"
            + zipCode + "/q.json", false);
   req.send(null);
-  if (req.status == 200) {
-    var data = JSON.parse(req.responseText), weather;
-    if (time) {
-      if (data.hourly_forecast) {
-        time = time/1000;
-        var forecast;
-        data.hourly_forecast.forEach(function(hourlyForecast) {
-          if (hourlyForecast.FCTTIME.epoch == time) {
-            forecast = hourlyForecast;
-          } 
-        });
-        weather = {
-          city: data.current_observation.display_location.city,
-          time: forecast.FCTTIME.pretty,
-          temp: forecast.temp.english,
-          cond: forecast.condition,
-          wind: forecast.wspd.english
-        };
-      } else {
-        throw data.response.error.description;
-      }
-    } else {
-      if (data.current_observation) {
-        weather = {
-          city: data.current_observation.display_location.city,
-          time: data.current_observation.observation_time,
-          temp: data.current_observation.temp_f,
-          cond: data.current_observation.weather,
-          wind: data.current_observation.wind_mph
-        };
-      } else {
-        throw data.response.error.description;
-      }
-    }
-    return weather;
-  } else {
+  if (req.status != 200) {
     throw req.statusText;
+  } else {
+    var data = JSON.parse(req.responseText);
+    if (!data.current_observation || !data.hourly_forecast) {
+      throw data.response.error.description;
+    } else {
+      return data;
+    }
   }
+}
+
+/**
+ * Given an object with weather data from the weather API
+ * and a unix time (UTC), returns an object with city, time 
+ * and forecasted temp, cond, and wind properties. If time
+ * given is "now", returns the current conditions.
+ */
+function getWeatherAtTime(data, time) {
+  var weather;
+  if (time == "now") {
+    weather = {
+      city: data.current_observation.display_location.city,
+      time: data.current_observation.observation_time,
+      temp: data.current_observation.temp_f,
+      cond: data.current_observation.weather,
+      wind: data.current_observation.wind_mph
+    };
+  } else {
+    time = time/1000;
+    var forecast;
+    data.hourly_forecast.forEach(function(hourlyForecast) {
+      if (hourlyForecast.FCTTIME.epoch == time) {
+        forecast = hourlyForecast;
+      } 
+    });
+    weather = {
+      city: data.current_observation.display_location.city,
+      time: forecast.FCTTIME.pretty,
+      temp: forecast.temp.english,
+      cond: forecast.condition,
+      wind: forecast.wspd.english
+    };
+  }
+  return weather;
 }
 
 /**
