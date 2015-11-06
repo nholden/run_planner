@@ -1,97 +1,143 @@
-var weatherInZip;
-initialize();
+/* Creates page elements. */
+var containerDiv = document.createElement("div");
+containerDiv.id = "container";
+document.body.appendChild(containerDiv);
 
-function initialize() {
-  var containerDiv = document.createElement("div");
-  containerDiv.id = "container";
-  document.body.appendChild(containerDiv);
+var locationDiv = document.createElement("div");
+locationDiv.id = "location";
+locationDiv.textContent = "Running in ";
+containerDiv.appendChild(locationDiv);
 
-  var locationDiv = document.createElement("div");
-  locationDiv.id = "location";
-  locationDiv.textContent = "Running in ";
-  containerDiv.appendChild(locationDiv);
+var cityLink = document.createElement("a");
+cityLink.href = "";
+locationDiv.appendChild(cityLink);
 
-  var cityLink = document.createElement("a");
-  cityLink.href = "";
-  locationDiv.appendChild(cityLink);
- 
-  var zipCodeInput = document.createElement("input");
-  zipCodeInput.type = "text";
-  zipCodeInput.id = "zipCode";
-  zipCodeInput.placeholder = "Zip code";
-  containerDiv.appendChild(zipCodeInput);
+var zipCodeInput = document.createElement("input");
+zipCodeInput.type = "text";
+zipCodeInput.id = "zipCode";
+zipCodeInput.placeholder = "Zip code";
+containerDiv.appendChild(zipCodeInput);
 
-  var setLocationButton = document.createElement("button");
-  setLocationButton.textContent = "Set location";
-  setLocationButton.id = "setLocation";
-  containerDiv.appendChild(setLocationButton);
+var setLocationButton = document.createElement("button");
+setLocationButton.textContent = "Set location";
+setLocationButton.id = "setLocation";
+containerDiv.appendChild(setLocationButton);
 
-  setLocationButton.addEventListener("click", function(event) {
-    event.preventDefault();
-    if (update()) {
-      zipCodeInput.style.display = "none";
-      setLocationButton.style.display = "none";
-      locationDiv.style.display = "block";
-      timeSelect.style.display = "block";
-    }
-  });
+var timeSelect = document.createElement("select");
+timeSelect.id = "time";
+containerDiv.appendChild(timeSelect);
 
-  var timeSelect = document.createElement("select");
-  timeSelect.id = "time";
-  containerDiv.appendChild(timeSelect);
+var nowOption = document.createElement("option");
+nowOption.textContent = "Now";
+nowOption.value = "now";
+timeSelect.appendChild(nowOption);
 
-  timeSelect.addEventListener("change", function() {
-    update();
-  });
+/* Adds next 24 hours to time menu. */
+next24Hours(new Date).forEach(function(hour) {
+  var hourOption = document.createElement("option");
+  hourOption.value = hour.getTime();
+  hourOption.textContent = hour12Format(hour);
+  timeSelect.appendChild(hourOption);
+});
 
-  function update() {
-    try {
-      if (!weatherInZip) {
-        weatherInZip = getWeatherInZip(zipCodeInput.value);
-      }
-      var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
-      cityLink.textContent = weather.city;
-      weatherDiv.innerHTML = weather.time +
-                             "<br>Temperature: " + weather.temp + "&deg;F" +
-                             "<br>Conditions: " + weather.cond +
-                             "<br>Wind speed: " + weather.wind + " mph";
-      var clothes = recommendClothes(weather);
-      var clothesHTML = "";
-      for (var bodyPart in clothes) {
-        clothesHTML += "<br>Wear " + clothes[bodyPart] + " on your " 
-                       + bodyPart + ".";
-      }
-      clothesDiv.innerHTML = "Clothing recommendations" + clothesHTML;
-      errorDiv.style.display = "none";
-      return true;
-    } catch(err) {
-      errorDiv.textContent = err;
-      errorDiv.style.display = "block";
-      return false;
-    }
+/* Creates more page elements. */
+var errorDiv = document.createElement("div");
+container.appendChild(errorDiv);
+
+var weatherDiv = document.createElement("div");
+container.appendChild(weatherDiv);
+
+var clothesDiv = document.createElement("div");
+container.appendChild(clothesDiv);
+
+/**
+ * Checks local storage for a saved zip code. If found and
+ * successfully able to update the page, shows the planner.
+ * Otherwise, defaults to prompting the user for a zip code.
+ */
+var weatherInZip, savedZip = localStorage.getItem("zipCode");
+if (savedZip) {
+  if (update()) {
+    weatherInZip = getWeatherInZip(savedZip);
+    showPlanner();
   }
-  
-  var nowOption = document.createElement("option");
-  nowOption.textContent = "Now";
-  nowOption.value = "now";
-  timeSelect.appendChild(nowOption);
-
-  next24Hours(new Date).forEach(function(hour) {
-    var hourOption = document.createElement("option");
-    hourOption.value = hour.getTime();
-    hourOption.textContent = hour12Format(hour);
-    timeSelect.appendChild(hourOption);
-  });
-
-  var errorDiv = document.createElement("div");
-  container.appendChild(errorDiv);
-
-  var weatherDiv = document.createElement("div");
-  container.appendChild(weatherDiv);
-
-  var clothesDiv = document.createElement("div");
-  container.appendChild(clothesDiv);
 }
+
+/**
+ * When the user clicks the set location button, saves 
+ * zip code to local storage and shows the planner. 
+ */
+setLocationButton.addEventListener("click", function(event) {
+  event.preventDefault();
+  if (update()) {
+    localStorage.setItem("zipCode", zipCodeInput.value)
+    showPlanner();
+  }
+});
+
+/* When user chooses a different time, updates the page. */
+timeSelect.addEventListener("change", function() {
+  update();
+});
+
+/**
+ * When the user clicks name of city, removes zip code
+ * from local storage and prompts the user for a zip code.
+ */
+cityLink.addEventListener("click", function(event) {
+  event.preventDefault();
+  localStorage.removeItem("zipCode");
+  showZipCodeEntry();
+});
+
+/**
+ * Updates the location, weather, and clothing recommendation
+ * elements on the page based on the user's inputs.
+ */
+function update() {
+  try {
+    if (!weatherInZip) {
+      weatherInZip = getWeatherInZip(zipCodeInput.value);
+    }
+    var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
+    cityLink.textContent = weather.city;
+    weatherDiv.innerHTML = weather.time +
+                           "<br>Temperature: " + weather.temp + "&deg;F" +
+                           "<br>Conditions: " + weather.cond +
+                           "<br>Wind speed: " + weather.wind + " mph";
+    var clothes = recommendClothes(weather);
+    var clothesHTML = "";
+    for (var bodyPart in clothes) {
+      clothesHTML += "<br>Wear " + clothes[bodyPart] + " on your " 
+                     + bodyPart + ".";
+    }
+    clothesDiv.innerHTML = "Clothing recommendations" + clothesHTML;
+    errorDiv.style.display = "none";
+    return true;
+  } catch(err) {
+    errorDiv.textContent = err;
+    errorDiv.style.display = "block";
+    return false;
+  }
+}
+
+/* Shows page elements associated with zip code entry. */
+function showZipCodeEntry() {
+  locationDiv.style.display = "none";
+  zipCodeInput.style.display = "inline";
+  setLocationButton.style.display = "inline";
+  timeSelect.style.display = "none";
+  weatherDiv.textContent = null;
+  clothesDiv.textContent = null;
+}
+
+/* Shows page elements associated with run planning. */
+function showPlanner() {
+  locationDiv.style.display = "block";
+  zipCodeInput.style.display = "none";
+  setLocationButton.style.display = "none";
+  timeSelect.style.display = "block";
+} 
 
 /** 
  * Given a date object, rounds down to the nearest hour and
