@@ -29,11 +29,12 @@ function buildLocationForm() {
   locationForm.appendChild(submit);
   submit.addEventListener("click", function(event) {
     event.preventDefault();
-    zipCodeInput.style.display = "none";
-    submit.style.display = "none";
-    locationDisplay.style.display = "block";
-    timeSelect.style.display = "block";
-    updateWeather();
+    if (updateWeather()) {
+      zipCodeInput.style.display = "none";
+      submit.style.display = "none";
+      locationDisplay.style.display = "block";
+      timeSelect.style.display = "block";
+    }
   });
 
   var timeSelect = document.createElement("select");
@@ -62,9 +63,12 @@ function buildLocationForm() {
                        + bodyPart + ".";
       }
       clothesDiv.innerHTML = "Clothing recommendations" + clothesHTML;
+      errorDiv.style.display = "none";
+      return true;
     } catch(err) {
-      weatherDiv.textContent = err;
-      clothesDiv.textContent = null;
+      errorDiv.textContent = err;
+      errorDiv.style.display = "block";
+      return false;
     }
   }
   
@@ -79,6 +83,9 @@ function buildLocationForm() {
     hourOption.textContent = hour12Format(hour);
     timeSelect.appendChild(hourOption);
   });
+
+  var errorDiv = document.createElement("div");
+  container.appendChild(errorDiv);
 
   var weatherDiv = document.createElement("div");
   container.appendChild(weatherDiv);
