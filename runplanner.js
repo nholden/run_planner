@@ -1,58 +1,57 @@
 var weatherInZip;
+initialize();
 
-function buildLocationForm() {
-  var container = document.createElement("div");
-  container.id = "container";
-  document.body.appendChild(container);
+function initialize() {
+  var containerDiv = document.createElement("div");
+  containerDiv.id = "container";
+  document.body.appendChild(containerDiv);
 
-  var locationDisplay = document.createElement("div");
-  locationDisplay.id = "locationDisplay";
-  locationDisplay.textContent = "Running in ";
-  container.appendChild(locationDisplay);
+  var locationDiv = document.createElement("div");
+  locationDiv.id = "location";
+  locationDiv.textContent = "Running in ";
+  containerDiv.appendChild(locationDiv);
+
   var cityLink = document.createElement("a");
   cityLink.href = "";
-  locationDisplay.appendChild(cityLink);
- 
-  var locationForm = document.createElement("form");
-  container.appendChild(locationForm);
+  locationDiv.appendChild(cityLink);
  
   var zipCodeInput = document.createElement("input");
   zipCodeInput.type = "text";
   zipCodeInput.id = "zipCode";
   zipCodeInput.placeholder = "Zip code";
-  locationForm.appendChild(zipCodeInput);
+  containerDiv.appendChild(zipCodeInput);
 
-  var submit = document.createElement("button");
-  submit.type = "submit";
-  submit.textContent = "Set location";
-  submit.id = "submit";
-  locationForm.appendChild(submit);
-  submit.addEventListener("click", function(event) {
+  var setLocationButton = document.createElement("button");
+  setLocationButton.textContent = "Set location";
+  setLocationButton.id = "setLocation";
+  containerDiv.appendChild(setLocationButton);
+
+  setLocationButton.addEventListener("click", function(event) {
     event.preventDefault();
-    if (updateWeather()) {
+    if (update()) {
       zipCodeInput.style.display = "none";
-      submit.style.display = "none";
-      locationDisplay.style.display = "block";
+      setLocationButton.style.display = "none";
+      locationDiv.style.display = "block";
       timeSelect.style.display = "block";
     }
   });
 
   var timeSelect = document.createElement("select");
   timeSelect.id = "time";
-  locationForm.appendChild(timeSelect);
+  containerDiv.appendChild(timeSelect);
+
   timeSelect.addEventListener("change", function() {
-    updateWeather();
+    update();
   });
 
-  function updateWeather() {
+  function update() {
     try {
       if (!weatherInZip) {
         weatherInZip = getWeatherInZip(zipCodeInput.value);
       }
       var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
       cityLink.textContent = weather.city;
-      weatherDiv.innerHTML = "Weather in zip code " + zipCodeInput.value +
-                             "<br>" + weather.time +
+      weatherDiv.innerHTML = weather.time +
                              "<br>Temperature: " + weather.temp + "&deg;F" +
                              "<br>Conditions: " + weather.cond +
                              "<br>Wind speed: " + weather.wind + " mph";
@@ -95,8 +94,8 @@ function buildLocationForm() {
 }
 
 /** 
- * given a date object, rounds down to the nearest hour and
- * returns an array of date objects for the next 24 hours
+ * Given a date object, rounds down to the nearest hour and
+ * returns an array of date objects for the next 24 hours.
  */
 function next24Hours(date) {
   date.setMinutes(0);
@@ -111,8 +110,8 @@ function next24Hours(date) {
 }
 
 /** 
- * given a date object, return a string with
- * the hour in 12-hour format
+ * Given a date object, returns a string
+ * with the hour in 12-hour format.
  */
 function hour12Format(date) {
   var now = new Date();
@@ -196,8 +195,8 @@ function getWeatherAtTime(data, time) {
 }
 
 /**
- * given a weather object, returns an object with
- * body parts as keys and clothing as values
+ * Given a weather object, returns an object with
+ * body parts as keys and clothing as values.
  */
 function recommendClothes(weather) {
   var clothes = {};
@@ -224,5 +223,3 @@ function recommendClothes(weather) {
   }
   return clothes;
 }
-
-buildLocationForm();
