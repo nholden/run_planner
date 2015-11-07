@@ -101,7 +101,11 @@ cityLink.addEventListener("click", function(event) {
 function update() {
   try {
     if (!weatherInZip) {
-      weatherInZip = getWeatherInZip(zipCodeInput.value);
+      if (zipCodeInput.value.match(/^\d{5}$/)) {
+        weatherInZip = getWeatherInZip(zipCodeInput.value);
+      } else {
+        throw "Zip code must be five digits.";
+      }
     }
     var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
     cityLink.textContent = weather.city;
