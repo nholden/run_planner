@@ -42,12 +42,15 @@ next24Hours(new Date).forEach(function(hour) {
 
 /* Creates more page elements. */
 var errorDiv = document.createElement("div");
+errorDiv.id = "error";
 container.appendChild(errorDiv);
 
 var weatherDiv = document.createElement("div");
+weatherDiv.id = "weather";
 container.appendChild(weatherDiv);
 
 var clothesDiv = document.createElement("div");
+clothesDiv.id = "clothes";
 container.appendChild(clothesDiv);
 
 /**
@@ -102,10 +105,10 @@ function update() {
     }
     var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
     cityLink.textContent = weather.city;
-    weatherDiv.innerHTML = weather.time +
-                           "<br>Temperature: " + weather.temp + "&deg;F" +
-                           "<br>Conditions: " + weather.cond +
-                           "<br>Wind speed: " + weather.wind + " mph";
+    weatherDiv.innerHTML = "<div id='cond'><i class='wi wi-wu-" + weather.icon + "'></i></div>" +
+                           "<div id='temp'>" + weather.temp + "&deg;F</div>" +
+                           "<div id='wind'>" + weather.wind + " mph</div>" +
+                           "<div id='timeOutput'>" + weather.time + "</div>";
     var clothes = recommendClothes(weather);
     var clothesHTML = "";
     for (var bodyPart in clothes) {
@@ -209,7 +212,7 @@ function getWeatherInZip(zipCode) {
 /**
  * Given an object with weather data from the weather API
  * and a unix time (UTC), returns an object with city, time 
- * and forecasted temp, cond, and wind properties. If time
+ * and forecasted temp, icon, and wind properties. If time
  * given is "now", returns the current conditions.
  */
 function getWeatherAtTime(data, time) {
@@ -219,7 +222,7 @@ function getWeatherAtTime(data, time) {
       city: data.current_observation.display_location.city,
       time: data.current_observation.observation_time,
       temp: data.current_observation.temp_f,
-      cond: data.current_observation.weather,
+      icon: data.current_observation.icon,
       wind: data.current_observation.wind_mph
     };
   } else {
@@ -234,7 +237,7 @@ function getWeatherAtTime(data, time) {
       city: data.current_observation.display_location.city,
       time: forecast.FCTTIME.pretty,
       temp: forecast.temp.english,
-      cond: forecast.condition,
+      icon: forecast.icon,
       wind: forecast.wspd.english
     };
   }
