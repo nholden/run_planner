@@ -1,6 +1,12 @@
 body {
-  background: url("../images/trail.jpg") no-repeat center top fixed;
-  background-size: cover;
+  background-image: url("../images/trail.jpg"); 
+  background-repeat: no-repeat; 
+  background-position: top center;
+  background-attachment: fixed;       
+  webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; 
 }
 
 #container {
