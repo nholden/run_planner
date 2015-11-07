@@ -1,3 +1,8 @@
+body {
+  background: url("../images/trail.jpg") no-repeat center top fixed;
+  background-size: cover;
+}
+
 #container {
   position: absolute;
   top: 50%;
@@ -6,6 +11,9 @@
   padding: 5px;
   width: 90%;
   max-width: 400px;
+  border-radius: 0.5em;
+  padding: 1em;
+  background-color: rgba(255,255,255,0.3);
 }
 
 input, select, button {
@@ -14,24 +22,32 @@ input, select, button {
   box-sizing: border-box;
   border-bottom-left-radius: 2em;
   border-top-right-radius: 2em;
-  border: 1px solid #000000;
-  background-color: #ffffff;
+  border: 0px;
+  background-color: rgba(255,255,255,0.3);
   margin: 0.25em 0;
   padding: 1em;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 1em;
-  font-weight: bold;
+  font-weight: 200;
   text-align: center;
 }
 
 div {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 200;
+}
+
+a {
+  color: #000000;
+  font-weight: 400;
+  text-decoration: none;
 }
 
 #location {
   text-align: center;
   font-size: 2em;
   display: none;
+  margin-bottom: 0.25em;
 }
 
 #zipCode {
@@ -51,11 +67,21 @@ div {
 
 #weather {
   text-align: center;
-  margin: 0.5em;
+  margin-top: 1em;
+  display: none;
+}
+
+#clothes {
+  margin-top: 1em;
+  display: none;
 }
 
 #cond, #temp, #wind {
   display: inline;
   margin: 0.5em;
   font-size: 2em;
+}
+
+ul {
+  margin: 0;
 }

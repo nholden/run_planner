@@ -110,12 +110,14 @@ function update() {
                            "<div id='wind'>" + weather.wind + " mph</div>" +
                            "<div id='timeOutput'>" + weather.time + "</div>";
     var clothes = recommendClothes(weather);
-    var clothesHTML = "";
+    clothesDiv.innerHTML = "You should wear:";
+    var clothesList = document.createElement("ul");
+    clothesDiv.appendChild(clothesList);
     for (var bodyPart in clothes) {
-      clothesHTML += "<br>Wear " + clothes[bodyPart] + " on your " 
-                     + bodyPart + ".";
+      var clothesItem = document.createElement("li"); 
+      clothesItem.textContent = clothes[bodyPart];
+      clothesList.appendChild(clothesItem);
     }
-    clothesDiv.innerHTML = "Clothing recommendations" + clothesHTML;
     errorDiv.style.display = "none";
     return true;
   } catch(err) {
@@ -131,7 +133,9 @@ function showZipCodeEntry() {
   zipCodeInput.style.display = "inline";
   setLocationButton.style.display = "inline";
   timeSelect.style.display = "none";
+  weatherDiv.style.display = "none";
   weatherDiv.textContent = null;
+  clothesDiv.style.display = "none";
   clothesDiv.textContent = null;
 }
 
@@ -141,6 +145,8 @@ function showPlanner() {
   zipCodeInput.style.display = "none";
   setLocationButton.style.display = "none";
   timeSelect.style.display = "block";
+  weatherDiv.style.display = "block";
+  clothesDiv.style.display = "block";
 } 
 
 /** 
