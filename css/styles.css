@@ -1,3 +1,8 @@
+html {
+ height:100%;
+ min-height:100%;
+}
+
 body {
   background-image: url("../images/trail.jpg"); 
   background-repeat: no-repeat; 
@@ -7,6 +12,7 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover; 
+  min-height:100%;
 }
 
 #container {
