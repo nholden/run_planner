@@ -87,6 +87,7 @@ timeSelect.addEventListener("change", function() {
 cityLink.addEventListener("click", function(event) {
   event.preventDefault();
   localStorage.removeItem("zipCode");
+  weatherInZip = null;
   showZipCodeEntry();
 });
 
