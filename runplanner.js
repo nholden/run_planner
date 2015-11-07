@@ -57,8 +57,8 @@ container.appendChild(clothesDiv);
  */
 var weatherInZip, savedZip = localStorage.getItem("zipCode");
 if (savedZip) {
+  weatherInZip = getWeatherInZip(savedZip);
   if (update()) {
-    weatherInZip = getWeatherInZip(savedZip);
     showPlanner();
   }
 }
