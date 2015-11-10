@@ -232,6 +232,7 @@ function getWeatherAtTime(data, time) {
       city: data.current_observation.display_location.city,
       time: data.current_observation.observation_time,
       temp: data.current_observation.temp_f,
+      feel: data.current_observation.feelslike_f,
       icon: data.current_observation.icon,
       wind: data.current_observation.wind_mph
     };
@@ -247,6 +248,7 @@ function getWeatherAtTime(data, time) {
       city: data.current_observation.display_location.city,
       time: forecast.FCTTIME.pretty,
       temp: forecast.temp.english,
+      feel: forecast.feelslike.english,
       icon: forecast.icon,
       wind: forecast.wspd.english
     };
