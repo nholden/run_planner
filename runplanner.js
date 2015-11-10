@@ -113,15 +113,15 @@ function update() {
                            "<div id='temp'>" + weather.temp + "&deg;F</div>" +
                            "<div id='wind'>" + weather.wind + " mph</div>" +
                            "<div id='timeOutput'>" + weather.time + "</div>";
-    var clothes = recommendClothes(weather);
     clothesDiv.innerHTML = "You should wear:";
     var clothesList = document.createElement("ul");
     clothesDiv.appendChild(clothesList);
-    for (var bodyPart in clothes) {
-      var clothesItem = document.createElement("li"); 
-      clothesItem.textContent = clothes[bodyPart];
-      clothesList.appendChild(clothesItem);
-    }
+    var clothes = recommendClothes(weather);
+    clothes.forEach(function(clothesItem) {
+      var listItem = document.createElement("li"); 
+      listItem.textContent = clothesItem;
+      clothesList.appendChild(listItem);
+    });
     errorDiv.style.display = "none";
     return true;
   } catch(err) {
@@ -257,31 +257,22 @@ function getWeatherAtTime(data, time) {
 }
 
 /**
- * Given a weather object, returns an object with
- * body parts as keys and clothing as values.
+ * Given a weather object, returns an array
+ * with recommended clothing 
  */
 function recommendClothes(weather) {
-  var clothes = {};
-  if (weather.temp <= 15) {
-    clothes.torso = "heavy jacket";
-    clothes.legs = "tights";
-    clothes.hands = "gloves";
-    clothes.head = "hat";
-  } else if (weather.temp <= 25) {
-    clothes.torso = "light jacket";
-    clothes.legs = "tights";
-    clothes.hands = "gloves";
-    clothes.head = "hat";
-  } else if (weather.temp <= 35) {
-    clothes.torso = "light jacket";
-    clothes.legs = "tights";
-    clothes.hands = "gloves";
-  } else if (weather.temp <= 45) {
-    clothes.torso = "long-sleeve shirt";
-    clothes.legs = "shorts";
+  var clothes = [];
+  if (weather.feel <= 15) {
+    clothes = ["heavy jacket", "tights", "gloves", "winter hat"];
+  } else if (weather.feel <= 25) {
+    clothes = ["light jacket", "tights", "gloves", "winter hat"];
+  } else if (weather.feel <= 35) {
+    clothes = ["light jacket", "tights", "gloves"];
+  } else if (weather.feel <= 45) {
+    clothes = ["long-sleeve shirt", "shorts"];
   } else {
-    clothes.torso = "short-sleeve shirt";
-    clothes.legs = "shorts";
+    clothes = ["short-sleeve shirt", "shorts"];
   }
+
   return clothes;
 }
