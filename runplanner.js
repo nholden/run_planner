@@ -33,7 +33,7 @@ nowOption.value = "now";
 timeSelect.appendChild(nowOption);
 
 /* Adds next 24 hours to time menu. */
-next24Hours(new Date).forEach(function(hour) {
+next24Hours(new Date()).forEach(function(hour) {
   var hourOption = document.createElement("option");
   hourOption.value = hour.getTime();
   hourOption.textContent = hour12Format(hour);
@@ -43,15 +43,15 @@ next24Hours(new Date).forEach(function(hour) {
 /* Creates more page elements. */
 var errorDiv = document.createElement("div");
 errorDiv.id = "error";
-container.appendChild(errorDiv);
+containerDiv.appendChild(errorDiv);
 
 var weatherDiv = document.createElement("div");
 weatherDiv.id = "weather";
-container.appendChild(weatherDiv);
+containerDiv.appendChild(weatherDiv);
 
 var clothesDiv = document.createElement("div");
 clothesDiv.id = "clothes";
-container.appendChild(clothesDiv);
+containerDiv.appendChild(clothesDiv);
 
 /**
  * Checks local storage for a saved zip code. If found and
@@ -73,7 +73,7 @@ if (savedZip) {
 setLocationButton.addEventListener("click", function(event) {
   event.preventDefault();
   if (update()) {
-    localStorage.setItem("zipCode", zipCodeInput.value)
+    localStorage.setItem("zipCode", zipCodeInput.value);
     showPlanner();
   }
 });
@@ -161,12 +161,12 @@ function next24Hours(date) {
   date.setMinutes(0);
   date.setSeconds(0);
   date.setMilliseconds(0);
-  var next24Hours = [];
+  var hours = [];
   for (var i = 1; i < 25; i++) {
-    next24Hours.push(new Date(date.getTime() + (3600000 * i)));
+    hours.push(new Date(date.getTime() + (3600000 * i)));
   }
 
-  return next24Hours;
+  return hours;
 }
 
 /** 
@@ -175,25 +175,25 @@ function next24Hours(date) {
  */
 function hour12Format(date) {
   var now = new Date();
-  var hour12Format = "";
-  if (date.getHours() == 0) {
-    hour12Format += "Midnight";
+  var formatted = "";
+  if (date.getHours() === 0) {
+    formatted += "Midnight";
   } else if (date.getHours() < 12) {
-    hour12Format += date.getHours() + " A.M.";
+    formatted += date.getHours() + " A.M.";
   } else if (date.getHours() == 12) {
-    hour12Format += "Noon";
+    formatted += "Noon";
   } else {
-    hour12Format += date.getHours() - 12 + " P.M.";
+    formatted += date.getHours() - 12 + " P.M.";
   }
 
   if (date.getDay() == now.getDay()) {
-    hour12Format += " today";
+    formatted += " today";
   } else if (date.getDay() == now.getDay() + 1 || 
              date.getDay() < now.getDay()) {
-    hour12Format += " tomorrow";
+    formatted += " tomorrow";
   }
 
-  return hour12Format;
+  return formatted;
 } 
 
 /**
@@ -204,8 +204,8 @@ function hour12Format(date) {
 function getWeatherInZip(zipCode) {
   var weatherApiRootUrl = "http://api.wunderground.com/api/585c642644dd880e/";
   var req = new XMLHttpRequest();
-  req.open("GET", weatherApiRootUrl + "conditions/hourly/q/"
-           + zipCode + "/q.json", false);
+  req.open("GET", weatherApiRootUrl + "conditions/hourly/q/" +
+           zipCode + "/q.json", false);
   req.send(null);
   if (req.status != 200) {
     throw req.statusText;
@@ -268,7 +268,7 @@ function recommendClothes(weather) {
   } else if (weather.temp <= 25) {
     clothes.torso = "light jacket";
     clothes.legs = "tights";
-    clothes:hands = "gloves";
+    clothes.hands = "gloves";
     clothes.head = "hat";
   } else if (weather.temp <= 35) {
     clothes.torso = "light jacket";
@@ -276,7 +276,7 @@ function recommendClothes(weather) {
     clothes.hands = "gloves";
   } else if (weather.temp <= 45) {
     clothes.torso = "long-sleeve shirt";
-    clothes.legs = "shorts"
+    clothes.legs = "shorts";
   } else {
     clothes.torso = "short-sleeve shirt";
     clothes.legs = "shorts";
