@@ -32,15 +32,6 @@ nowOption.textContent = "Now";
 nowOption.value = "now";
 timeSelect.appendChild(nowOption);
 
-/* Adds next 24 hours to time menu. */
-next24Hours(new Date()).forEach(function(hour) {
-  var hourOption = document.createElement("option");
-  hourOption.value = hour.getTime();
-  hourOption.textContent = hour12Format(hour);
-  timeSelect.appendChild(hourOption);
-});
-
-/* Creates more page elements. */
 var errorDiv = document.createElement("div");
 errorDiv.id = "error";
 containerDiv.appendChild(errorDiv);
@@ -143,8 +134,27 @@ function showZipCodeEntry() {
   clothesDiv.textContent = null;
 }
 
-/* Shows page elements associated with run planning. */
+/** 
+ * Resets time options based on time zone in zip code 
+ * and shows page elements associated with run planning. 
+ */
 function showPlanner() {
+  while (timeSelect.firstChild) {
+    timeSelect.removeChild(timeSelect.firstChild);
+  }
+
+  var nowOption = document.createElement("option");
+  nowOption.textContent = "Now";
+  nowOption.value = "now";
+  timeSelect.appendChild(nowOption);
+
+  next24Hours(new Date()).forEach(function(hour) {
+    var hourOption = document.createElement("option");
+    hourOption.value = hour.getTime();
+    hourOption.textContent = hour12Format(hour);
+    timeSelect.appendChild(hourOption);
+  });
+
   locationDiv.style.display = "block";
   zipCodeInput.style.display = "none";
   setLocationButton.style.display = "none";
@@ -170,21 +180,27 @@ function next24Hours(date) {
 }
 
 /** 
- * Given a date object, returns a string
- * with the hour in 12-hour format.
+ * Given a date object, returns a string with
+ * the hour and timezone in 12-hour format.
  */
 function hour12Format(date) {
-  var now = new Date();
-  var formatted = "";
+  var formatted = "", now = new Date();
+
+  var timezoneOffset = parseInt(now.getTimezoneOffset() / 60 + 
+                                weatherInZip.current_observation.local_tz_offset / 100);
+  date.setHours(date.getHours() + timezoneOffset);
+
   if (date.getHours() === 0) {
-    formatted += "Midnight";
+    formatted += "Midnight ";
   } else if (date.getHours() < 12) {
-    formatted += date.getHours() + " A.M.";
+    formatted += date.getHours() + " A.M. ";
   } else if (date.getHours() == 12) {
-    formatted += "Noon";
+    formatted += "Noon ";
   } else {
-    formatted += date.getHours() - 12 + " P.M.";
+    formatted += date.getHours() - 12 + " P.M. ";
   }
+  
+  formatted += weatherInZip.current_observation.local_tz_short;
 
   if (date.getDay() == now.getDay()) {
     formatted += " today";
