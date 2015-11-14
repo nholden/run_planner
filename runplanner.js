@@ -204,7 +204,7 @@ function hour12Format(date) {
 function getWeatherInZip(zipCode) {
   var weatherApiRootUrl = "http://api.wunderground.com/api/585c642644dd880e/";
   var req = new XMLHttpRequest();
-  req.open("GET", weatherApiRootUrl + "conditions/hourly/q/" +
+  req.open("GET", weatherApiRootUrl + "conditions/hourly/astronomy/q/" +
            zipCode + "/q.json", false);
   req.send(null);
   if (req.status != 200) {
@@ -222,11 +222,29 @@ function getWeatherInZip(zipCode) {
 /**
  * Given an object with weather data from the weather API
  * and a unix time (UTC), returns an object with city, time 
- * and forecasted temp, icon, and wind properties. If time
- * given is "now", returns the current conditions.
+ * and forecasted temp, icon, wind, and isDay properties.
+ * If time given is "now", returns the current conditions.
  */
 function getWeatherAtTime(data, time) {
   var weather;
+  
+  var isDay;
+  var forecastTime = new Date();
+  if (time != "now") forecastTime.setTime(time);
+  var sunrise = new Date();
+  sunrise.setTime(forecastTime);
+  sunrise.setHours(data.sun_phase.sunrise.hour);
+  sunrise.setMinutes(data.sun_phase.sunrise.minute);
+  var sunset = new Date();
+  sunset.setTime(forecastTime);
+  sunset.setHours(data.sun_phase.sunset.hour);
+  sunset.setMinutes(data.sun_phase.sunset.minute);
+  if (forecastTime < sunrise || forecastTime > sunset) {
+    isDay = 0;
+  } else {
+    isDay = 1;
+  }
+
   if (time == "now") {
     weather = {
       city: data.current_observation.display_location.city,
@@ -234,13 +252,13 @@ function getWeatherAtTime(data, time) {
       temp: data.current_observation.temp_f,
       feel: data.current_observation.feelslike_f,
       icon: data.current_observation.icon,
-      wind: data.current_observation.wind_mph
+      wind: data.current_observation.wind_mph,
+      isDay: isDay
     };
   } else {
-    time = time/1000;
     var forecast;
     data.hourly_forecast.forEach(function(hourlyForecast) {
-      if (hourlyForecast.FCTTIME.epoch == time) {
+      if (hourlyForecast.FCTTIME.epoch == time / 1000) {
         forecast = hourlyForecast;
       } 
     });
@@ -250,7 +268,8 @@ function getWeatherAtTime(data, time) {
       temp: forecast.temp.english,
       feel: forecast.feelslike.english,
       icon: forecast.icon,
-      wind: forecast.wspd.english
+      wind: forecast.wspd.english,
+      isDay: isDay
     };
   }
   return weather;
