@@ -13,6 +13,7 @@ body {
   -o-background-size: cover;
   background-size: cover; 
   min-height:100%;
+  margin: 0;
 }
 
 #container {
