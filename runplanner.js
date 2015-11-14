@@ -293,5 +293,11 @@ function recommendClothes(weather) {
     clothes = ["short-sleeve shirt", "shorts"];
   }
 
+  var sunglassesWeather = ["clear", "hazy", "sunny", 
+                           "mostlysunny", "partlycloudy"];
+  if (weather.isDay && sunglassesWeather.indexOf(weather.icon) > -1) {
+    clothes.push("sunglasses");
+  }
+  
   return clothes;
 }
