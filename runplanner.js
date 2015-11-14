@@ -230,14 +230,16 @@ function getWeatherAtTime(data, time) {
   
   var isDay;
   var forecastTime = new Date();
+  var timezoneOffset = parseInt(forecastTime.getTimezoneOffset() / 60 + 
+                                data.current_observation.local_tz_offset /100);
   if (time != "now") forecastTime.setTime(time);
   var sunrise = new Date();
   sunrise.setTime(forecastTime);
-  sunrise.setHours(data.sun_phase.sunrise.hour);
+  sunrise.setHours(parseInt(data.sun_phase.sunrise.hour) - timezoneOffset);
   sunrise.setMinutes(data.sun_phase.sunrise.minute);
   var sunset = new Date();
   sunset.setTime(forecastTime);
-  sunset.setHours(data.sun_phase.sunset.hour);
+  sunset.setHours(parseInt(data.sun_phase.sunset.hour) - timezoneOffset);
   sunset.setMinutes(data.sun_phase.sunset.minute);
   if (forecastTime < sunrise || forecastTime > sunset) {
     isDay = 0;
