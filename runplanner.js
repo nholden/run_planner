@@ -124,6 +124,7 @@ function update() {
 
 /* Shows page elements associated with zip code entry. */
 function showZipCodeEntry() {
+  resetTimeOptions();
   locationDiv.style.display = "none";
   zipCodeInput.style.display = "inline";
   setLocationButton.style.display = "inline";
@@ -135,18 +136,11 @@ function showZipCodeEntry() {
 }
 
 /** 
- * Resets time options based on time zone in zip code 
+ * Generate time options based on time zone in zip code 
  * and shows page elements associated with run planning. 
  */
 function showPlanner() {
-  while (timeSelect.firstChild) {
-    timeSelect.removeChild(timeSelect.firstChild);
-  }
-
-  var nowOption = document.createElement("option");
-  nowOption.textContent = "Now";
-  nowOption.value = "now";
-  timeSelect.appendChild(nowOption);
+  resetTimeOptions();
 
   next24Hours(new Date()).forEach(function(hour) {
     var hourOption = document.createElement("option");
@@ -162,6 +156,18 @@ function showPlanner() {
   weatherDiv.style.display = "block";
   clothesDiv.style.display = "block";
 } 
+
+/* Removes all options from time select and rebuilds now option */
+function resetTimeOptions() {
+  while (timeSelect.firstChild) {
+    timeSelect.removeChild(timeSelect.firstChild);
+  }
+
+  var nowOption = document.createElement("option");
+  nowOption.textContent = "Now";
+  nowOption.value = "now";
+  timeSelect.appendChild(nowOption);
+}
 
 /** 
  * Given a date object, rounds down to the nearest hour and
