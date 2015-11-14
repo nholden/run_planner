@@ -44,6 +44,11 @@ var clothesDiv = document.createElement("div");
 clothesDiv.id = "clothes";
 containerDiv.appendChild(clothesDiv);
 
+var rulesLink = document.createElement("a");
+rulesLink.href = "";
+rulesLink.textContent = "Change rules";
+containerDiv.appendChild(rulesLink);
+
 /**
  * Checks local storage for a saved zip code. If found and
  * successfully able to update the page, shows the planner.
@@ -133,6 +138,7 @@ function showZipCodeEntry() {
   weatherDiv.textContent = null;
   clothesDiv.style.display = "none";
   clothesDiv.textContent = null;
+  rulesLink.style.display = "none";
 }
 
 /** 
@@ -155,6 +161,7 @@ function showPlanner() {
   timeSelect.style.display = "block";
   weatherDiv.style.display = "block";
   clothesDiv.style.display = "block";
+  rulesLink.style.display = "block";
 } 
 
 /* Removes all options from time select and rebuilds now option */
@@ -324,4 +331,161 @@ function recommendClothes(weather) {
   }
   
   return clothes;
+}
+
+/* When the user clicks the change rules link, shows rules */
+rulesLink.addEventListener("click", function(event) {
+  event.preventDefault();
+  showRules();
+});
+
+/* Shows rules */
+function showRules() {
+  locationDiv.style.display = "none";
+  zipCodeInput.style.display = "none";
+  setLocationButton.style.display = "none";
+  timeSelect.style.display = "none";
+  weatherDiv.style.display = "none";
+  clothesDiv.style.display = "none";
+  rulesLink.style.display = "none";
+  
+  var rulesTitleDiv = document.createElement("div");
+  rulesTitleDiv.id = "rulesTitle";
+  rulesTitleDiv.textContent = "Rules";
+  containerDiv.appendChild(rulesTitleDiv);
+  
+  var ruleDiv = document.createElement("div");
+  ruleDiv.id = "rule1";
+  ruleDiv.textContent = "Rule 1: Wear ";
+  containerDiv.appendChild(ruleDiv);
+
+  var clothesInput = document.createElement("input"); 
+  clothesInput.type = "text";
+  clothesInput.id = "rule1_clothes";
+  clothesInput.placeholder = "Clothing item";
+  ruleDiv.appendChild(clothesInput);
+
+  ruleDiv.innerHTML += " when ";
+
+  var triggerInput = document.createElement("select");
+  triggerInput.id = "rule1_trigger";
+  ruleDiv.appendChild(triggerInput);
+  
+  var feelOption = document.createElement("option");
+  feelOption.textContent = "it feels";
+  feelOption.value = "feel";
+  triggerInput.appendChild(feelOption);
+
+  var tempOption = document.createElement("option");
+  tempOption.textContent = "the temperature is";
+  tempOption.value = "temp";
+  triggerInput.appendChild(tempOption);
+
+  var windOption = document.createElement("option");
+  windOption.textContent = "the wind speed is";
+  windOption.value = "wind";
+  triggerInput.appendChild(windOption);
+
+  var iconOption = document.createElement("option");
+  iconOption.textContent = "the conditions are";
+  iconOption.value = "icon";
+  triggerInput.appendChild(iconOption);
+  
+  var isDayOption = document.createElement("option");
+  isDayOption.textContent = "it is daytime";
+  isDayOption.value = "isDay";
+  triggerInput.appendChild(isDayOption);
+
+  var isNotDayOption = document.createElement("option");
+  isNotDayOption.textContent = "it is nighttime";
+  isNotDayOption.value = "isNotDay";
+  triggerInput.appendChild(isNotDayOption);
+  triggerInput.addEventListener("change", triggerListener);
+  triggerListener();
+
+  function triggerListener() {
+    if (document.querySelector("#rule1_arg1")) {
+      ruleDiv.removeChild(document.querySelector("#rule1_arg1"));
+    }
+    
+    if (document.querySelector("#rule1_arg2")) {
+      ruleDiv.removeChild(document.querySelector("#rule1_arg2"));
+    }
+    
+    if (triggerInput.value == "feel") {
+      var feelCompareSelect = document.createElement("select");
+      feelCompareSelect.id = "rule1_arg1";
+      ruleDiv.appendChild(feelCompareSelect);
+
+      var coolerFeelOption = document.createElement("option");
+      coolerFeelOption.textContent = "cooler than";
+      coolerFeelOption.value = "cooler";
+      feelCompareSelect.appendChild(coolerFeelOption);
+
+      var warmerFeelOption = document.createElement("option");
+      warmerFeelOption.textContent = "warmer than";
+      warmerFeelOption.value = "warmer";
+      feelCompareSelect.appendChild(warmerFeelOption);
+
+      var feelInput = document.createElement("input");
+      feelInput.type = "text";
+      feelInput.id = "rule1_arg2";
+      ruleDiv.appendChild(feelInput);
+    } else if (triggerInput.value == "temp") {
+      var tempCompareSelect = document.createElement("select");
+      tempCompareSelect.id = "rule1_arg1";
+      ruleDiv.appendChild(tempCompareSelect);
+
+      var coolerTempOption = document.createElement("option");
+      coolerTempOption.textContent = "cooler than";
+      coolerTempOption.value = "cooler";
+      tempCompareSelect.appendChild(coolerTempOption);
+
+      var warmerTempOption = document.createElement("option");
+      warmerTempOption.textContent = "warmer than";
+      warmerTempOption.value = "warmer";
+      tempCompareSelect.appendChild(warmerTempOption);
+
+      var tempInput = document.createElement("input");
+      tempInput.type = "text";
+      tempInput.id = "rule1_arg2";
+      ruleDiv.appendChild(tempInput);
+    } else if (triggerInput.value == "wind") {
+      var windCompareSelect = document.createElement("select");
+      windCompareSelect.id = "rule1_arg1";
+      ruleDiv.appendChild(windCompareSelect);
+
+      var slowerOption = document.createElement("option");
+      slowerOption.textContent = "slower than";
+      slowerOption.value = "slower";
+      windCompareSelect.appendChild(slowerOption);
+
+      var fasterOption = document.createElement("option");
+      fasterOption.textContent = "faster than";
+      fasterOption.value = "faster";
+      windCompareSelect.appendChild(fasterOption);
+
+      var windInput = document.createElement("input");
+      windInput.type = "text";
+      windInput.id = "rule1_arg2";
+      ruleDiv.appendChild(windInput);
+    } else if (triggerInput.value == "icon") {
+      var iconSelect = document.createElement("select");
+      iconSelect.id = "rule1_arg1";
+      ruleDiv.appendChild(iconSelect);
+
+      var icons = ["chanceflurries", "chancerain", "chancesleet", 
+                   "chancesnow", "chancetstorms", "clear", "cloudy",
+                   "flurries", "fog", "hazy", "mostlycloudy",
+                   "mostlysunny", "partlycloudy", "partlysunny",
+                   "rain", "sleet", "snow", "sunny", "tstorms"];
+
+      icons.forEach(function(icon) {
+        var option = document.createElement("option");
+        option.textContent = icon;
+        option.value = icon;
+        iconSelect.appendChild(option);
+      });
+    }
+  }
 }
