@@ -354,15 +354,14 @@ function showRules() {
   rulesTitleDiv.textContent = "Rules";
   containerDiv.appendChild(rulesTitleDiv);
 
+  addRule(0);
   addRule(1);
-  addRule(2);
 }
   
 function addRule(ruleNumber) {
   var ruleIdPrefix = "rule" + ruleNumber + "_";
-
   var ruleDiv = document.createElement("div");
-  ruleDiv.id = ruleIdPrefix;
+  ruleDiv.id = "rule" + ruleNumber;
   ruleDiv.textContent = "Rule: Wear ";
   containerDiv.appendChild(ruleDiv);
 
@@ -373,9 +372,15 @@ function addRule(ruleNumber) {
   ruleDiv.appendChild(clothesInput);
 
   ruleDiv.innerHTML += " when ";
+  addTrigger(ruleNumber, 0);
+}
+
+function addTrigger(ruleNumber, triggerNumber) {
+  var triggerIdPrefix = "rule" + ruleNumber + "_" + triggerNumber + "_";
+  var ruleDiv = document.querySelector("#rule" + ruleNumber);
 
   var triggerInput = document.createElement("select");
-  triggerInput.id = ruleIdPrefix + "trigger";
+  triggerInput.id = "rule" + ruleNumber + "_" + triggerNumber;
   ruleDiv.appendChild(triggerInput);
   
   var feelOption = document.createElement("option");
@@ -407,21 +412,22 @@ function addRule(ruleNumber) {
   isNotDayOption.textContent = "it is nighttime";
   isNotDayOption.value = "isNotDay";
   triggerInput.appendChild(isNotDayOption);
+
   triggerInput.addEventListener("change", triggerListener);
   triggerListener();
 
   function triggerListener() {
-    if (document.querySelector("#" + ruleIdPrefix + "arg1")) {
-      ruleDiv.removeChild(document.querySelector("#" + ruleIdPrefix + "arg1"));
+    if (document.querySelector("#" + triggerIdPrefix + "0")) {
+      ruleDiv.removeChild(document.querySelector("#" + triggerIdPrefix + "0"));
     }
     
-    if (document.querySelector("#" + ruleIdPrefix + "arg2")) {
-      ruleDiv.removeChild(document.querySelector("#" + ruleIdPrefix + "arg2"));
+    if (document.querySelector("#" + triggerIdPrefix + "1")) {
+      ruleDiv.removeChild(document.querySelector("#" + triggerIdPrefix + "1"));
     }
     
     if (triggerInput.value == "feel") {
       var feelCompareSelect = document.createElement("select");
-      feelCompareSelect.id = ruleIdPrefix + "arg1";
+      feelCompareSelect.id = triggerIdPrefix + "0";
       ruleDiv.appendChild(feelCompareSelect);
 
       var coolerFeelOption = document.createElement("option");
@@ -436,11 +442,11 @@ function addRule(ruleNumber) {
 
       var feelInput = document.createElement("input");
       feelInput.type = "text";
-      feelInput.id = ruleIdPrefix + "arg2";
+      feelInput.id = triggerIdPrefix + "1";
       ruleDiv.appendChild(feelInput);
     } else if (triggerInput.value == "temp") {
       var tempCompareSelect = document.createElement("select");
-      tempCompareSelect.id = ruleIdPrefix + "arg1";
+      tempCompareSelect.id = triggerIdPrefix + "0";
       ruleDiv.appendChild(tempCompareSelect);
 
       var coolerTempOption = document.createElement("option");
@@ -455,11 +461,11 @@ function addRule(ruleNumber) {
 
       var tempInput = document.createElement("input");
       tempInput.type = "text";
-      tempInput.id = ruleIdPrefix + "arg2";
+      tempInput.id = triggerIdPrefix + "1";
       ruleDiv.appendChild(tempInput);
     } else if (triggerInput.value == "wind") {
       var windCompareSelect = document.createElement("select");
-      windCompareSelect.id = ruleIdPrefix + "arg1";
+      windCompareSelect.id = triggerIdPrefix + "0";
       ruleDiv.appendChild(windCompareSelect);
 
       var slowerOption = document.createElement("option");
@@ -474,15 +480,14 @@ function addRule(ruleNumber) {
 
       var windInput = document.createElement("input");
       windInput.type = "text";
-      windInput.id = ruleIdPrefix + "arg2";
+      windInput.id = triggerIdPrefix + "1";
       ruleDiv.appendChild(windInput);
     } else if (triggerInput.value == "icon") {
       var iconSelect = document.createElement("select");
-      iconSelect.id = ruleIdPrefix + "arg1";
+      iconSelect.id = triggerIdPrefix + "0";
       ruleDiv.appendChild(iconSelect);
 
       var icons = ["chanceflurries", "chancerain", "chancesleet", 
-                   "chancesnow", "chancetstorms", "clear", "cloudy",
                    "flurries", "fog", "hazy", "mostlycloudy",
                    "mostlysunny", "partlycloudy", "partlysunny",
                    "rain", "sleet", "snow", "sunny", "tstorms"];
