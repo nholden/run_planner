@@ -353,22 +353,29 @@ function showRules() {
   rulesTitleDiv.id = "rulesTitle";
   rulesTitleDiv.textContent = "Rules";
   containerDiv.appendChild(rulesTitleDiv);
+
+  addRule(1);
+  addRule(2);
+}
   
+function addRule(ruleNumber) {
+  var ruleIdPrefix = "rule" + ruleNumber + "_";
+
   var ruleDiv = document.createElement("div");
-  ruleDiv.id = "rule1";
-  ruleDiv.textContent = "Rule 1: Wear ";
+  ruleDiv.id = ruleIdPrefix;
+  ruleDiv.textContent = "Rule: Wear ";
   containerDiv.appendChild(ruleDiv);
 
   var clothesInput = document.createElement("input"); 
   clothesInput.type = "text";
-  clothesInput.id = "rule1_clothes";
+  clothesInput.id = ruleIdPrefix + "clothes";
   clothesInput.placeholder = "Clothing item";
   ruleDiv.appendChild(clothesInput);
 
   ruleDiv.innerHTML += " when ";
 
   var triggerInput = document.createElement("select");
-  triggerInput.id = "rule1_trigger";
+  triggerInput.id = ruleIdPrefix + "trigger";
   ruleDiv.appendChild(triggerInput);
   
   var feelOption = document.createElement("option");
@@ -404,17 +411,17 @@ function showRules() {
   triggerListener();
 
   function triggerListener() {
-    if (document.querySelector("#rule1_arg1")) {
-      ruleDiv.removeChild(document.querySelector("#rule1_arg1"));
+    if (document.querySelector("#" + ruleIdPrefix + "arg1")) {
+      ruleDiv.removeChild(document.querySelector("#" + ruleIdPrefix + "arg1"));
     }
     
-    if (document.querySelector("#rule1_arg2")) {
-      ruleDiv.removeChild(document.querySelector("#rule1_arg2"));
+    if (document.querySelector("#" + ruleIdPrefix + "arg2")) {
+      ruleDiv.removeChild(document.querySelector("#" + ruleIdPrefix + "arg2"));
     }
     
     if (triggerInput.value == "feel") {
       var feelCompareSelect = document.createElement("select");
-      feelCompareSelect.id = "rule1_arg1";
+      feelCompareSelect.id = ruleIdPrefix + "arg1";
       ruleDiv.appendChild(feelCompareSelect);
 
       var coolerFeelOption = document.createElement("option");
@@ -429,11 +436,11 @@ function showRules() {
 
       var feelInput = document.createElement("input");
       feelInput.type = "text";
-      feelInput.id = "rule1_arg2";
+      feelInput.id = ruleIdPrefix + "arg2";
       ruleDiv.appendChild(feelInput);
     } else if (triggerInput.value == "temp") {
       var tempCompareSelect = document.createElement("select");
-      tempCompareSelect.id = "rule1_arg1";
+      tempCompareSelect.id = ruleIdPrefix + "arg1";
       ruleDiv.appendChild(tempCompareSelect);
 
       var coolerTempOption = document.createElement("option");
@@ -448,11 +455,11 @@ function showRules() {
 
       var tempInput = document.createElement("input");
       tempInput.type = "text";
-      tempInput.id = "rule1_arg2";
+      tempInput.id = ruleIdPrefix + "arg2";
       ruleDiv.appendChild(tempInput);
     } else if (triggerInput.value == "wind") {
       var windCompareSelect = document.createElement("select");
-      windCompareSelect.id = "rule1_arg1";
+      windCompareSelect.id = ruleIdPrefix + "arg1";
       ruleDiv.appendChild(windCompareSelect);
 
       var slowerOption = document.createElement("option");
@@ -467,11 +474,11 @@ function showRules() {
 
       var windInput = document.createElement("input");
       windInput.type = "text";
-      windInput.id = "rule1_arg2";
+      windInput.id = ruleIdPrefix + "arg2";
       ruleDiv.appendChild(windInput);
     } else if (triggerInput.value == "icon") {
       var iconSelect = document.createElement("select");
-      iconSelect.id = "rule1_arg1";
+      iconSelect.id = ruleIdPrefix + "arg1";
       ruleDiv.appendChild(iconSelect);
 
       var icons = ["chanceflurries", "chancerain", "chancesleet", 
