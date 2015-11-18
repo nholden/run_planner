@@ -102,7 +102,7 @@ ul {
 #thermometer {
   display: block;
   height: 1em;
-  background: linear-gradient(to right, blue, red);
+  background: linear-gradient(to right, rgba(0,0,255,0.5), rgba(255,0,0,0.5));
 }
 
 .clothingRule {
@@ -110,10 +110,9 @@ ul {
   height: 2em;
   line-height: 2em;
   cursor: pointer;
-  background-color: rgba(255,255,255,0.3);
 }
 
-#heavyJacketName, #heavyJacketFeel {
+.itemName, .itemMinFeel, .itemMaxFeel {
   border-bottom-left-radius: 0;
   border-top-right-radius: 0;
   margin: 0 0.2em;

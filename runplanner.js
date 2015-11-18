@@ -339,6 +339,42 @@ rulesLink.addEventListener("click", function(event) {
   showRules();
 });
 
+var clothes = [
+  {
+    name: "heavy jacket",
+    minFeel: -20,
+    maxFeel: 15,
+    day: true,
+    night: true,
+    clear: true,
+    cloudy: true,
+    raining: false,
+    snowing: true
+  },
+  {
+    name: "light jacket",
+    minFeel: 15,
+    maxFeel: 30,
+    day: true,
+    night: true,
+    clear: true,
+    cloudy: true,
+    raining: true,
+    snowing: true
+  },
+  { 
+    name: "shorts",
+    minFeel: 25,
+    maxFeel: 120,
+    day: true,
+    night: true,
+    clear: true,
+    cloudy: true,
+    raining: true,
+    snowing: true
+  }
+];
+
 /* Shows rules */
 function showRules() {
   locationDiv.style.display = "none";
@@ -358,56 +394,86 @@ function showRules() {
   thermometerDiv.id = "thermometer";
   containerDiv.appendChild(thermometerDiv);
 
-  var heavyJacketDiv = document.createElement("div");
-  heavyJacketDiv.className = "clothingRule";
-  heavyJacketDiv.textContent = "heavy jacket";
-  heavyJacketDiv.style.width = "30%";
-  containerDiv.appendChild(heavyJacketDiv);
+  clothes.forEach(function(item, index) {
+    var itemDiv = document.createElement("div");
+    itemDiv.className = "clothingRule";
+    itemDiv.textContent = item.name;
+    var itemDivStartPercent = (item.minFeel + 20)/1.4;
+    var itemDivEndPercent = (item.maxFeel + 20)/1.4;
+    itemDiv.style.background = "linear-gradient(to right, transparent, transparent " +
+                               itemDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                               itemDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                               itemDivEndPercent + "%, transparent " +
+                               itemDivEndPercent + "%, transparent 100%)";
+    containerDiv.appendChild(itemDiv);
 
-  var heavyJacketDescDiv = document.createElement("div");
-  heavyJacketDescDiv.style.display = "none";
-  heavyJacketDescDiv.innerHTML = "Wear a";
-  var heavyJacketNameInput = document.createElement("input");
-  heavyJacketNameInput.type = "text";
-  heavyJacketNameInput.id = "heavyJacketName";
-  heavyJacketNameInput.defaultValue = "heavy jacket";
-  heavyJacketNameInput.size = "15";
-  heavyJacketDescDiv.appendChild(heavyJacketNameInput);
-  heavyJacketDescDiv.innerHTML += "when it feels cooler than";
-  var heavyJacketFeelInput = document.createElement("input");
-  heavyJacketFeelInput.type = "text";
-  heavyJacketFeelInput.id = "heavyJacketFeel";
-  heavyJacketFeelInput.defaultValue = "15";
-  heavyJacketFeelInput.size = "5";
-  heavyJacketDescDiv.appendChild(heavyJacketFeelInput);
-  heavyJacketDescDiv.innerHTML += "&deg;F and it is...";
-  containerDiv.appendChild(heavyJacketDescDiv);
+    var itemCriteriaDiv = document.createElement("div");
+    containerDiv.appendChild(itemCriteriaDiv);
+    itemCriteriaDiv.style.display = "none";
+    itemCriteriaDiv.innerHTML = "Wear";
 
-  var conditions = ["daytime", "nighttime", "clear", "cloudy", "raining", "snowing"];
-  conditions.forEach(function(condition) {
-    var checkboxDiv = document.createElement("div");
-    heavyJacketDescDiv.appendChild(checkboxDiv);
-    var checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.id = condition;
-    checkboxDiv.appendChild(checkbox);
-    var checkboxLabel = document.createElement("label");
-    checkboxLabel.htmlFor = condition;
-    checkboxLabel.textContent = condition;
-    checkboxDiv.appendChild(checkboxLabel);
-  });
+    var itemNameInput = document.createElement("input");
+    itemNameInput.type = "text";
+    itemNameInput.className = "itemName";
+    itemNameInput.defaultValue = item.name;
+    itemNameInput.size = "15";
+    itemCriteriaDiv.appendChild(itemNameInput);
+    itemCriteriaDiv.innerHTML += "when it feels warmer than or equal to";
+ 
+    var itemMinFeelInput = document.createElement("input");
+    itemMinFeelInput.type = "text";
+    itemMinFeelInput.className = "itemMinFeel";
+    itemMinFeelInput.defaultValue = item.minFeel;
+    itemMinFeelInput.size = "5";
+    itemCriteriaDiv.appendChild(itemMinFeelInput);
+    itemCriteriaDiv.innerHTML += "&deg;F and it feels cooler than";
 
-  var saveButton = document.createElement("button");
-  saveButton.textContent = "Save and close";
-  heavyJacketDescDiv.appendChild(saveButton);
-  var closeButton = document.createElement("button");
-  closeButton.textContent = "Close";
-  heavyJacketDescDiv.appendChild(closeButton);
-  var deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-  heavyJacketDescDiv.appendChild(deleteButton);
+    var itemMaxFeelInput = document.createElement("input");
+    itemMaxFeelInput.type = "text";
+    itemMaxFeelInput.className = "itemMaxFeel";
+    itemMaxFeelInput.defaultValue = item.maxFeel;
+    itemMaxFeelInput.size = "5";
+    itemCriteriaDiv.appendChild(itemMaxFeelInput);
+    itemCriteriaDiv.innerHTML += "&deg;F and it is...";
 
-  heavyJacketDiv.addEventListener("click", function() {
-    heavyJacketDescDiv.style.display = "block";
+    var conditions = ["day", "night", "clear", "cloudy", "raining", "snowing"];
+    conditions.forEach(function(condition) {
+      var checkboxDiv = document.createElement("div");
+      itemCriteriaDiv.appendChild(checkboxDiv);
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = condition;
+      checkbox.checked = item[condition];
+      checkboxDiv.appendChild(checkbox);
+      var checkboxLabel = document.createElement("label");
+      checkboxLabel.htmlFor = condition;
+      checkboxLabel.textContent = condition;
+      checkboxDiv.appendChild(checkboxLabel);
+    });
+
+    var saveButton = document.createElement("button");
+    saveButton.textContent = "Save and close";
+    itemCriteriaDiv.appendChild(saveButton);
+    saveButton.addEventListener("click", function() {
+      itemCriteriaDiv.style.display = "none";
+    });
+
+    var closeButton = document.createElement("button");
+    closeButton.textContent = "Close";
+    itemCriteriaDiv.appendChild(closeButton);
+    closeButton.addEventListener("click", function() {
+      itemCriteriaDiv.style.display = "none";
+    });
+
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    itemCriteriaDiv.appendChild(deleteButton);
+    deleteButton.addEventListener("click", function() {
+      itemCriteriaDiv.style.display = "none";
+    });
+
+    itemDiv.addEventListener("click", function() {
+      itemCriteriaDiv.style.display = "block";
+    });
   });
 }
