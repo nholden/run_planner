@@ -354,150 +354,60 @@ function showRules() {
   rulesTitleDiv.textContent = "Rules";
   containerDiv.appendChild(rulesTitleDiv);
 
-  addRule(0);
-  addRule(1);
-}
-  
-function addRule(ruleNumber) {
-  var ruleIdPrefix = "rule" + ruleNumber + "_";
-  var ruleDiv = document.createElement("div");
-  ruleDiv.id = "rule" + ruleNumber;
-  ruleDiv.textContent = "Rule: Wear ";
-  containerDiv.appendChild(ruleDiv);
+  var thermometerDiv = document.createElement("div");
+  thermometerDiv.id = "thermometer";
+  containerDiv.appendChild(thermometerDiv);
 
-  var clothesInput = document.createElement("input"); 
-  clothesInput.type = "text";
-  clothesInput.id = ruleIdPrefix + "clothes";
-  clothesInput.placeholder = "Clothing item";
-  ruleDiv.appendChild(clothesInput);
+  var heavyJacketDiv = document.createElement("div");
+  heavyJacketDiv.className = "clothingRule";
+  heavyJacketDiv.textContent = "heavy jacket";
+  heavyJacketDiv.style.width = "30%";
+  containerDiv.appendChild(heavyJacketDiv);
 
-  ruleDiv.innerHTML += " when ";
-  addTrigger(ruleNumber, 0);
-}
+  var heavyJacketDescDiv = document.createElement("div");
+  heavyJacketDescDiv.style.display = "none";
+  heavyJacketDescDiv.innerHTML = "Wear a";
+  var heavyJacketNameInput = document.createElement("input");
+  heavyJacketNameInput.type = "text";
+  heavyJacketNameInput.id = "heavyJacketName";
+  heavyJacketNameInput.defaultValue = "heavy jacket";
+  heavyJacketNameInput.size = "15";
+  heavyJacketDescDiv.appendChild(heavyJacketNameInput);
+  heavyJacketDescDiv.innerHTML += "when it feels cooler than";
+  var heavyJacketFeelInput = document.createElement("input");
+  heavyJacketFeelInput.type = "text";
+  heavyJacketFeelInput.id = "heavyJacketFeel";
+  heavyJacketFeelInput.defaultValue = "15";
+  heavyJacketFeelInput.size = "5";
+  heavyJacketDescDiv.appendChild(heavyJacketFeelInput);
+  heavyJacketDescDiv.innerHTML += "&deg;F and it is...";
+  containerDiv.appendChild(heavyJacketDescDiv);
 
-function addTrigger(ruleNumber, triggerNumber) {
-  var triggerIdPrefix = "rule" + ruleNumber + "_" + triggerNumber + "_";
-  var ruleDiv = document.querySelector("#rule" + ruleNumber);
+  var conditions = ["daytime", "nighttime", "clear", "cloudy", "raining", "snowing"];
+  conditions.forEach(function(condition) {
+    var checkboxDiv = document.createElement("div");
+    heavyJacketDescDiv.appendChild(checkboxDiv);
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = condition;
+    checkboxDiv.appendChild(checkbox);
+    var checkboxLabel = document.createElement("label");
+    checkboxLabel.htmlFor = condition;
+    checkboxLabel.textContent = condition;
+    checkboxDiv.appendChild(checkboxLabel);
+  });
 
-  var triggerInput = document.createElement("select");
-  triggerInput.id = "rule" + ruleNumber + "_" + triggerNumber;
-  ruleDiv.appendChild(triggerInput);
-  
-  var feelOption = document.createElement("option");
-  feelOption.textContent = "it feels";
-  feelOption.value = "feel";
-  triggerInput.appendChild(feelOption);
+  var saveButton = document.createElement("button");
+  saveButton.textContent = "Save and close";
+  heavyJacketDescDiv.appendChild(saveButton);
+  var closeButton = document.createElement("button");
+  closeButton.textContent = "Close";
+  heavyJacketDescDiv.appendChild(closeButton);
+  var deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  heavyJacketDescDiv.appendChild(deleteButton);
 
-  var tempOption = document.createElement("option");
-  tempOption.textContent = "the temperature is";
-  tempOption.value = "temp";
-  triggerInput.appendChild(tempOption);
-
-  var windOption = document.createElement("option");
-  windOption.textContent = "the wind speed is";
-  windOption.value = "wind";
-  triggerInput.appendChild(windOption);
-
-  var iconOption = document.createElement("option");
-  iconOption.textContent = "the conditions are";
-  iconOption.value = "icon";
-  triggerInput.appendChild(iconOption);
-  
-  var isDayOption = document.createElement("option");
-  isDayOption.textContent = "it is daytime";
-  isDayOption.value = "isDay";
-  triggerInput.appendChild(isDayOption);
-
-  var isNotDayOption = document.createElement("option");
-  isNotDayOption.textContent = "it is nighttime";
-  isNotDayOption.value = "isNotDay";
-  triggerInput.appendChild(isNotDayOption);
-
-  triggerInput.addEventListener("change", triggerListener);
-  triggerListener();
-
-  function triggerListener() {
-    if (document.querySelector("#" + triggerIdPrefix + "0")) {
-      ruleDiv.removeChild(document.querySelector("#" + triggerIdPrefix + "0"));
-    }
-    
-    if (document.querySelector("#" + triggerIdPrefix + "1")) {
-      ruleDiv.removeChild(document.querySelector("#" + triggerIdPrefix + "1"));
-    }
-    
-    if (triggerInput.value == "feel") {
-      var feelCompareSelect = document.createElement("select");
-      feelCompareSelect.id = triggerIdPrefix + "0";
-      ruleDiv.appendChild(feelCompareSelect);
-
-      var coolerFeelOption = document.createElement("option");
-      coolerFeelOption.textContent = "cooler than";
-      coolerFeelOption.value = "cooler";
-      feelCompareSelect.appendChild(coolerFeelOption);
-
-      var warmerFeelOption = document.createElement("option");
-      warmerFeelOption.textContent = "warmer than";
-      warmerFeelOption.value = "warmer";
-      feelCompareSelect.appendChild(warmerFeelOption);
-
-      var feelInput = document.createElement("input");
-      feelInput.type = "text";
-      feelInput.id = triggerIdPrefix + "1";
-      ruleDiv.appendChild(feelInput);
-    } else if (triggerInput.value == "temp") {
-      var tempCompareSelect = document.createElement("select");
-      tempCompareSelect.id = triggerIdPrefix + "0";
-      ruleDiv.appendChild(tempCompareSelect);
-
-      var coolerTempOption = document.createElement("option");
-      coolerTempOption.textContent = "cooler than";
-      coolerTempOption.value = "cooler";
-      tempCompareSelect.appendChild(coolerTempOption);
-
-      var warmerTempOption = document.createElement("option");
-      warmerTempOption.textContent = "warmer than";
-      warmerTempOption.value = "warmer";
-      tempCompareSelect.appendChild(warmerTempOption);
-
-      var tempInput = document.createElement("input");
-      tempInput.type = "text";
-      tempInput.id = triggerIdPrefix + "1";
-      ruleDiv.appendChild(tempInput);
-    } else if (triggerInput.value == "wind") {
-      var windCompareSelect = document.createElement("select");
-      windCompareSelect.id = triggerIdPrefix + "0";
-      ruleDiv.appendChild(windCompareSelect);
-
-      var slowerOption = document.createElement("option");
-      slowerOption.textContent = "slower than";
-      slowerOption.value = "slower";
-      windCompareSelect.appendChild(slowerOption);
-
-      var fasterOption = document.createElement("option");
-      fasterOption.textContent = "faster than";
-      fasterOption.value = "faster";
-      windCompareSelect.appendChild(fasterOption);
-
-      var windInput = document.createElement("input");
-      windInput.type = "text";
-      windInput.id = triggerIdPrefix + "1";
-      ruleDiv.appendChild(windInput);
-    } else if (triggerInput.value == "icon") {
-      var iconSelect = document.createElement("select");
-      iconSelect.id = triggerIdPrefix + "0";
-      ruleDiv.appendChild(iconSelect);
-
-      var icons = ["chanceflurries", "chancerain", "chancesleet", 
-                   "flurries", "fog", "hazy", "mostlycloudy",
-                   "mostlysunny", "partlycloudy", "partlysunny",
-                   "rain", "sleet", "snow", "sunny", "tstorms"];
-
-      icons.forEach(function(icon) {
-        var option = document.createElement("option");
-        option.textContent = icon;
-        option.value = icon;
-        iconSelect.appendChild(option);
-      });
-    }
-  }
+  heavyJacketDiv.addEventListener("click", function() {
+    heavyJacketDescDiv.style.display = "block";
+  });
 }
