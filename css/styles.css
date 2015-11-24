@@ -107,6 +107,10 @@ ul {
 
 .clothingRule {
   display: block;
+}
+
+.clothingBar {
+  display: block;
   height: 2em;
   line-height: 2em;
   cursor: pointer;

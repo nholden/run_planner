@@ -339,41 +339,48 @@ rulesLink.addEventListener("click", function(event) {
   showRules();
 });
 
-var clothes = [
-  {
-    name: "heavy jacket",
-    minFeel: -20,
-    maxFeel: 15,
-    day: true,
-    night: true,
-    clear: true,
-    cloudy: true,
-    raining: false,
-    snowing: true
-  },
-  {
-    name: "light jacket",
-    minFeel: 15,
-    maxFeel: 30,
-    day: true,
-    night: true,
-    clear: true,
-    cloudy: true,
-    raining: true,
-    snowing: true
-  },
-  { 
-    name: "shorts",
-    minFeel: 25,
-    maxFeel: 120,
-    day: true,
-    night: true,
-    clear: true,
-    cloudy: true,
-    raining: true,
-    snowing: true
-  }
-];
+/** 
+ * Checks local storage for saved rules.
+ * If none saved, sets rules to default. 
+ */
+var rules = localStorage.getItem("rules");
+if (!rules) {
+  rules = [
+    {
+      name: "heavy jacket",
+      minFeel: -20,
+      maxFeel: 15,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: false,
+      snowing: true
+    },
+    {
+      name: "light jacket",
+      minFeel: 15,
+      maxFeel: 30,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    },
+    { 
+      name: "shorts",
+      minFeel: 25,
+      maxFeel: 120,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    }
+  ];
+}
 
 /* Shows rules */
 function showRules() {
@@ -394,21 +401,25 @@ function showRules() {
   thermometerDiv.id = "thermometer";
   containerDiv.appendChild(thermometerDiv);
 
-  clothes.forEach(function(item, index) {
+  rules.forEach(function(item, index) {
     var itemDiv = document.createElement("div");
     itemDiv.className = "clothingRule";
-    itemDiv.textContent = item.name;
-    var itemDivStartPercent = (item.minFeel + 20)/1.4;
-    var itemDivEndPercent = (item.maxFeel + 20)/1.4;
-    itemDiv.style.background = "linear-gradient(to right, transparent, transparent " +
-                               itemDivStartPercent + "%, rgba(255,255,255,0.3) " + 
-                               itemDivStartPercent + "%, rgba(255,255,255,0.3) " + 
-                               itemDivEndPercent + "%, transparent " +
-                               itemDivEndPercent + "%, transparent 100%)";
     containerDiv.appendChild(itemDiv);
 
+    var itemBarDiv = document.createElement("div");
+    itemBarDiv.className = "clothingBar";
+    itemBarDiv.textContent = item.name;
+    var itemBarDivStartPercent = (item.minFeel + 20)/1.4;
+    var itemBarDivEndPercent = (item.maxFeel + 20)/1.4;
+    itemBarDiv.style.background = "linear-gradient(to right, transparent, transparent " +
+                                  itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                                  itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                                  itemBarDivEndPercent + "%, transparent " +
+                                  itemBarDivEndPercent + "%, transparent 100%)";
+    itemDiv.appendChild(itemBarDiv);
+
     var itemCriteriaDiv = document.createElement("div");
-    containerDiv.appendChild(itemCriteriaDiv);
+    itemDiv.appendChild(itemCriteriaDiv);
     itemCriteriaDiv.style.display = "none";
     itemCriteriaDiv.innerHTML = "Wear";
 
@@ -472,8 +483,33 @@ function showRules() {
       itemCriteriaDiv.style.display = "none";
     });
 
-    itemDiv.addEventListener("click", function() {
+    itemBarDiv.addEventListener("click", function() {
       itemCriteriaDiv.style.display = "block";
     });
   });
+}
+
+/** 
+ * Sets rules to reflect the current values of 
+ * the rules inputs and saves to local storage.
+ */
+function saveRules() {
+  var newRules = [];
+  var rulesDivs = document.querySelectorAll(".clothingRule"); 
+  console.log(rulesDivs);
+  for (var i = 0; i < rulesDivs.length; i++) {
+    newRules.push({
+      name: rulesDivs[i].querySelector(".itemName").value,
+      minFeel: rulesDivs[i].querySelector(".itemMinFeel").value,
+      maxFeel: rulesDivs[i].querySelector(".itemMaxFeel").value,
+      day: rulesDivs[i].querySelector("#day").checked,
+      night: rulesDivs[i].querySelector("#night").checked,
+      clear: rulesDivs[i].querySelector("#clear").checked,
+      cloudy: rulesDivs[i].querySelector("#cloudy").checked,
+      raining: rulesDivs[i].querySelector("#raining").checked,
+      snowing: rulesDivs[i].querySelector("#snowing").checked
+    });
+  }
+  rules = newRules;
+  localStorage.setItem("rules", rules);
 }
