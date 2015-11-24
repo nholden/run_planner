@@ -455,15 +455,24 @@ function showRules() {
     itemDiv.appendChild(itemCriteriaDiv);
     itemCriteriaDiv.className = "clothingCriteria";
     itemCriteriaDiv.style.display = "none";
-    itemCriteriaDiv.innerHTML = "Wear";
+
+    var textSpan0 = document.createElement("span");
+    textSpan0.innerHTML = "Wear";
+    itemCriteriaDiv.appendChild(textSpan0);
 
     var itemNameInput = document.createElement("input");
     itemNameInput.type = "text";
     itemNameInput.className = "itemName";
     itemNameInput.defaultValue = item.name;
     itemNameInput.size = "15";
+    itemNameInput.addEventListener("input", function() {
+      itemBarDiv.textContent = itemNameInput.value;
+    });
     itemCriteriaDiv.appendChild(itemNameInput);
-    itemCriteriaDiv.innerHTML += "when it feels warmer than or equal to";
+
+    var textSpan1 = document.createElement("span");
+    textSpan1.innerHTML = "when it feels warmer than or equal to";
+    itemCriteriaDiv.appendChild(textSpan1);
  
     var itemMinFeelInput = document.createElement("input");
     itemMinFeelInput.type = "text";
@@ -471,7 +480,10 @@ function showRules() {
     itemMinFeelInput.defaultValue = item.minFeel;
     itemMinFeelInput.size = "5";
     itemCriteriaDiv.appendChild(itemMinFeelInput);
-    itemCriteriaDiv.innerHTML += "&deg;F and it feels cooler than";
+
+    var textSpan2 = document.createElement("span");
+    textSpan2.innerHTML = "&deg;F and it feels cooler than";
+    itemCriteriaDiv.appendChild(textSpan2);
 
     var itemMaxFeelInput = document.createElement("input");
     itemMaxFeelInput.type = "text";
@@ -479,7 +491,10 @@ function showRules() {
     itemMaxFeelInput.defaultValue = item.maxFeel;
     itemMaxFeelInput.size = "5";
     itemCriteriaDiv.appendChild(itemMaxFeelInput);
-    itemCriteriaDiv.innerHTML += "&deg;F and it is...";
+
+    var textSpan3 = document.createElement("span");
+    textSpan3.innerHTML = "&deg;F and it is...";
+    itemCriteriaDiv.appendChild(textSpan3);
 
     var conditions = ["day", "night", "clear", "cloudy", "raining", "snowing"];
     conditions.forEach(function(condition) {
