@@ -53,6 +53,29 @@ var thermometerDiv = document.createElement("div");
 thermometerDiv.id = "thermometer";
 containerDiv.appendChild(thermometerDiv);
 
+var rulesDiv = document.createElement("div");
+rulesDiv.style.display = "none";
+container.appendChild(rulesDiv);
+
+var rulesButtonsDiv = document.createElement("div");
+rulesButtonsDiv.style.display = "none";
+container.appendChild(rulesButtonsDiv);
+
+var saveButton = document.createElement("button");
+saveButton.textContent = "Save rules";
+rulesButtonsDiv.appendChild(saveButton);
+saveButton.addEventListener("click", function() {
+  saveRules();
+  showPlanner();
+});
+
+var resetButton = document.createElement("button");
+resetButton.textContent = "Reset";
+rulesButtonsDiv.appendChild(resetButton);
+resetButton.addEventListener("click", function() {
+  showRules();
+});
+
 /**
  * Checks local storage for a saved zip code. If found and
  * successfully able to update the page, shows the planner.
@@ -143,6 +166,9 @@ function showZipCodeEntry() {
   clothesDiv.style.display = "none";
   clothesDiv.textContent = null;
   rulesLink.style.display = "none";
+  thermometerDiv.style.display = "none";
+  rulesDiv.style.display = "none";
+  rulesButtonsDiv.style.display = "none";
 }
 
 /** 
@@ -166,6 +192,9 @@ function showPlanner() {
   weatherDiv.style.display = "block";
   clothesDiv.style.display = "block";
   rulesLink.style.display = "block";
+  thermometerDiv.style.display = "none";
+  rulesDiv.style.display = "none";
+  rulesButtonsDiv.style.display = "none";
 } 
 
 /* Removes all options from time select and rebuilds now option */
@@ -393,13 +422,7 @@ if (rules) {
  * and creates new ones from the rules variable. 
  */
 function showRules() {
-  var rulesDivs = document.querySelectorAll(".clothingRule"); 
-  if (rulesDivs) {
-    for (var i = 0; i < rulesDivs.length; i++) {
-      containerDiv.removeChild(rulesDivs[i]);
-    }
-  }
-
+  removeRules(); 
   locationDiv.style.display = "none";
   zipCodeInput.style.display = "none";
   setLocationButton.style.display = "none";
@@ -408,11 +431,13 @@ function showRules() {
   clothesDiv.style.display = "none";
   rulesLink.style.display = "none";
   thermometer.style.display = "block";
+  rulesDiv.style.display = "block";
+  rulesButtonsDiv.style.display = "block";
   
   rules.forEach(function(item, index) {
     var itemDiv = document.createElement("div");
     itemDiv.className = "clothingRule";
-    containerDiv.appendChild(itemDiv);
+    rulesDiv.appendChild(itemDiv);
 
     var itemBarDiv = document.createElement("div");
     itemBarDiv.className = "clothingBar";
@@ -428,6 +453,7 @@ function showRules() {
 
     var itemCriteriaDiv = document.createElement("div");
     itemDiv.appendChild(itemCriteriaDiv);
+    itemCriteriaDiv.className = "clothingCriteria";
     itemCriteriaDiv.style.display = "none";
     itemCriteriaDiv.innerHTML = "Wear";
 
@@ -470,29 +496,11 @@ function showRules() {
       checkboxDiv.appendChild(checkboxLabel);
     });
 
-    var saveButton = document.createElement("button");
-    saveButton.textContent = "Save and close";
-    itemCriteriaDiv.appendChild(saveButton);
-    saveButton.addEventListener("click", function() {
-      saveRules();
-      showRules();
-    });
-
-    var closeButton = document.createElement("button");
-    closeButton.textContent = "Close";
-    itemCriteriaDiv.appendChild(closeButton);
-    closeButton.addEventListener("click", function() {
-      showRules();
-    });
-
-    var deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
-    itemCriteriaDiv.appendChild(deleteButton);
-    deleteButton.addEventListener("click", function() {
-      itemCriteriaDiv.style.display = "none";
-    });
-
     itemBarDiv.addEventListener("click", function() {
+      var allItemCriteriaDivs = document.querySelectorAll(".clothingCriteria");
+      for (var i = 0; i < allItemCriteriaDivs.length; i++) {
+        allItemCriteriaDivs[i].style.display = "none";
+      }
       itemCriteriaDiv.style.display = "block";
     });
   });
@@ -520,4 +528,14 @@ function saveRules() {
   }
   rules = newRules;
   localStorage.setItem("rules", JSON.stringify(rules));
+}
+
+/* Removes any existing rule page elements */
+function removeRules() {
+  var rulesDivs = document.querySelectorAll(".clothingRule"); 
+  if (rulesDivs) {
+    for (var i = 0; i < rulesDivs.length; i++) {
+      rulesDiv.removeChild(rulesDivs[i]);
+    }
+  }
 }
