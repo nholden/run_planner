@@ -49,6 +49,10 @@ rulesLink.href = "";
 rulesLink.textContent = "Change rules";
 containerDiv.appendChild(rulesLink);
 
+var thermometerDiv = document.createElement("div");
+thermometerDiv.id = "thermometer";
+containerDiv.appendChild(thermometerDiv);
+
 /**
  * Checks local storage for a saved zip code. If found and
  * successfully able to update the page, shows the planner.
@@ -384,8 +388,18 @@ if (rules) {
   ];
 }
 
-/* Shows rules */
+/** 
+ * Deletes any existing rule elements on the page
+ * and creates new ones from the rules variable. 
+ */
 function showRules() {
+  var rulesDivs = document.querySelectorAll(".clothingRule"); 
+  if (rulesDivs) {
+    for (var i = 0; i < rulesDivs.length; i++) {
+      containerDiv.removeChild(rulesDivs[i]);
+    }
+  }
+
   locationDiv.style.display = "none";
   zipCodeInput.style.display = "none";
   setLocationButton.style.display = "none";
@@ -393,16 +407,8 @@ function showRules() {
   weatherDiv.style.display = "none";
   clothesDiv.style.display = "none";
   rulesLink.style.display = "none";
+  thermometer.style.display = "block";
   
-  var rulesTitleDiv = document.createElement("div");
-  rulesTitleDiv.id = "rulesTitle";
-  rulesTitleDiv.textContent = "Rules";
-  containerDiv.appendChild(rulesTitleDiv);
-
-  var thermometerDiv = document.createElement("div");
-  thermometerDiv.id = "thermometer";
-  containerDiv.appendChild(thermometerDiv);
-
   rules.forEach(function(item, index) {
     var itemDiv = document.createElement("div");
     itemDiv.className = "clothingRule";
@@ -468,14 +474,15 @@ function showRules() {
     saveButton.textContent = "Save and close";
     itemCriteriaDiv.appendChild(saveButton);
     saveButton.addEventListener("click", function() {
-      itemCriteriaDiv.style.display = "none";
+      saveRules();
+      showRules();
     });
 
     var closeButton = document.createElement("button");
     closeButton.textContent = "Close";
     itemCriteriaDiv.appendChild(closeButton);
     closeButton.addEventListener("click", function() {
-      itemCriteriaDiv.style.display = "none";
+      showRules();
     });
 
     var deleteButton = document.createElement("button");
