@@ -344,7 +344,9 @@ rulesLink.addEventListener("click", function(event) {
  * If none saved, sets rules to default. 
  */
 var rules = localStorage.getItem("rules");
-if (!rules) {
+if (rules) {
+  rules = JSON.parse(rules);
+} else {
   rules = [
     {
       name: "heavy jacket",
@@ -496,12 +498,11 @@ function showRules() {
 function saveRules() {
   var newRules = [];
   var rulesDivs = document.querySelectorAll(".clothingRule"); 
-  console.log(rulesDivs);
   for (var i = 0; i < rulesDivs.length; i++) {
     newRules.push({
       name: rulesDivs[i].querySelector(".itemName").value,
-      minFeel: rulesDivs[i].querySelector(".itemMinFeel").value,
-      maxFeel: rulesDivs[i].querySelector(".itemMaxFeel").value,
+      minFeel: parseInt(rulesDivs[i].querySelector(".itemMinFeel").value),
+      maxFeel: parseInt(rulesDivs[i].querySelector(".itemMaxFeel").value),
       day: rulesDivs[i].querySelector("#day").checked,
       night: rulesDivs[i].querySelector("#night").checked,
       clear: rulesDivs[i].querySelector("#clear").checked,
@@ -511,5 +512,5 @@ function saveRules() {
     });
   }
   rules = newRules;
-  localStorage.setItem("rules", rules);
+  localStorage.setItem("rules", JSON.stringify(rules));
 }
