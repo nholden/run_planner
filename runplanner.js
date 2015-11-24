@@ -498,10 +498,13 @@ function showRules() {
 
     itemBarDiv.addEventListener("click", function() {
       var allItemCriteriaDivs = document.querySelectorAll(".clothingCriteria");
+      var wasHidden = itemCriteriaDiv.style.display == "none";
       for (var i = 0; i < allItemCriteriaDivs.length; i++) {
         allItemCriteriaDivs[i].style.display = "none";
       }
-      itemCriteriaDiv.style.display = "block";
+      if (wasHidden) {
+        itemCriteriaDiv.style.display = "block";
+      }
     });
   });
 }
