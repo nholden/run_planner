@@ -442,14 +442,23 @@ function showRules() {
     var itemBarDiv = document.createElement("div");
     itemBarDiv.className = "clothingBar";
     itemBarDiv.textContent = item.name;
-    var itemBarDivStartPercent = (item.minFeel + 20)/1.4;
-    var itemBarDivEndPercent = (item.maxFeel + 20)/1.4;
-    itemBarDiv.style.background = "linear-gradient(to right, transparent, transparent " +
-                                  itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
-                                  itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
-                                  itemBarDivEndPercent + "%, transparent " +
-                                  itemBarDivEndPercent + "%, transparent 100%)";
+    updateItemBarBG(item.minFeel, item.maxFeel);
     itemDiv.appendChild(itemBarDiv);
+
+/** 
+ * Given a minimum feel temp and a maximum feel temp,
+ * updates the background color of itemBarDiv to reflect
+ * where along the thermometer the rule falls.
+ */
+    function updateItemBarBG(minFeel, maxFeel) {
+      var itemBarDivStartPercent = (parseInt(minFeel) + 20)/1.4;
+      var itemBarDivEndPercent = (parseInt(maxFeel) + 20)/1.4;
+      itemBarDiv.style.background = "linear-gradient(to right, transparent, transparent " +
+                                    itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                                    itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                                    itemBarDivEndPercent + "%, transparent " +
+                                    itemBarDivEndPercent + "%, transparent 100%)";
+    }
 
     var itemCriteriaDiv = document.createElement("div");
     itemDiv.appendChild(itemCriteriaDiv);
@@ -479,6 +488,9 @@ function showRules() {
     itemMinFeelInput.className = "itemMinFeel";
     itemMinFeelInput.defaultValue = item.minFeel;
     itemMinFeelInput.size = "5";
+    itemMinFeelInput.addEventListener("change", function() {
+      updateItemBarBG(itemMinFeelInput.value, itemMaxFeelInput.value);
+    });
     itemCriteriaDiv.appendChild(itemMinFeelInput);
 
     var textSpan2 = document.createElement("span");
@@ -490,6 +502,9 @@ function showRules() {
     itemMaxFeelInput.className = "itemMaxFeel";
     itemMaxFeelInput.defaultValue = item.maxFeel;
     itemMaxFeelInput.size = "5";
+    itemMaxFeelInput.addEventListener("change", function() {
+      updateItemBarBG(itemMinFeelInput.value, itemMaxFeelInput.value);
+    });
     itemCriteriaDiv.appendChild(itemMaxFeelInput);
 
     var textSpan3 = document.createElement("span");
@@ -534,8 +549,8 @@ function saveRules() {
   for (var i = 0; i < rulesDivs.length; i++) {
     newRules.push({
       name: rulesDivs[i].querySelector(".itemName").value,
-      minFeel: parseInt(rulesDivs[i].querySelector(".itemMinFeel").value),
-      maxFeel: parseInt(rulesDivs[i].querySelector(".itemMaxFeel").value),
+      minFeel: rulesDivs[i].querySelector(".itemMinFeel").value,
+      maxFeel: rulesDivs[i].querySelector(".itemMaxFeel").value,
       day: rulesDivs[i].querySelector("#day").checked,
       night: rulesDivs[i].querySelector("#night").checked,
       clear: rulesDivs[i].querySelector("#clear").checked,
