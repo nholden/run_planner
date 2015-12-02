@@ -76,6 +76,52 @@ resetButton.addEventListener("click", function() {
   showRules();
 });
 
+/** 
+ * Checks local storage for saved rules.
+ * If none saved, sets rules to default. 
+ */
+var rules = localStorage.getItem("rules");
+if (rules) {
+  rules = JSON.parse(rules);
+} else {
+  rules = [
+    {
+      name: "heavy jacket",
+      minFeel: -20,
+      maxFeel: 15,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: false,
+      snowing: true
+    },
+    {
+      name: "light jacket",
+      minFeel: 15,
+      maxFeel: 30,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    },
+    { 
+      name: "shorts",
+      minFeel: 25,
+      maxFeel: 120,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    }
+  ];
+}
+
+
 /**
  * Checks local storage for a saved zip code. If found and
  * successfully able to update the page, shows the planner.
@@ -345,24 +391,29 @@ function getWeatherAtTime(data, time) {
  */
 function recommendClothes(weather) {
   var clothes = [];
-  if (weather.feel <= 15) {
-    clothes = ["heavy jacket", "tights", "gloves", "winter hat"];
-  } else if (weather.feel <= 25) {
-    clothes = ["light jacket", "tights", "gloves", "winter hat"];
-  } else if (weather.feel <= 35) {
-    clothes = ["light jacket", "tights", "gloves"];
-  } else if (weather.feel <= 45) {
-    clothes = ["long-sleeve shirt", "shorts"];
-  } else {
-    clothes = ["short-sleeve shirt", "shorts"];
-  }
+  var clearIcons = ["clear", "hazy", "mostlysunny",
+                    "partlycloudy", "sunny"];
+  var cloudyIcons = ["cloudy", "fog", "mostlycloudy",
+                     "partlysunny", ];
+  var rainingIcons = ["chancerain", "chancesleet", "chancetstorms",
+                      "sleet", "rain", "tstorms"];
+  var snowingIcons = ["chanceflurries", "chancesnow", "flurries",
+                      "snow" ];
 
-  var sunglassesWeather = ["clear", "hazy", "sunny", 
-                           "mostlysunny", "partlycloudy"];
-  if (weather.isDay && sunglassesWeather.indexOf(weather.icon) > -1) {
-    clothes.push("sunglasses");
-  }
-  
+  rules.forEach(function(rule) {
+    if (parseFloat(rule.minFeel) <= parseFloat(weather.feel) && 
+        parseFloat(rule.maxFeel) > parseFloat(weather.feel)) {
+      if (weather.isDay && rule.day || !weather.isDay && rule.night) {
+        if (rule.clear && clearIcons.indexOf(weather.icon) > -1 ||
+            rule.cloudy && cloudyIcons.indexOf(weather.icon) > -1 ||
+            rule.raining && rainingIcons.indexOf(weather.icon) > -1 ||
+            rule.snowing && snowingIcons.indexOf(weather.icon) > -1) {
+          clothes.push(rule.name); 
+        }
+      }
+    }
+  });
+
   return clothes;
 }
 
@@ -371,51 +422,6 @@ rulesLink.addEventListener("click", function(event) {
   event.preventDefault();
   showRules();
 });
-
-/** 
- * Checks local storage for saved rules.
- * If none saved, sets rules to default. 
- */
-var rules = localStorage.getItem("rules");
-if (rules) {
-  rules = JSON.parse(rules);
-} else {
-  rules = [
-    {
-      name: "heavy jacket",
-      minFeel: -20,
-      maxFeel: 15,
-      day: true,
-      night: true,
-      clear: true,
-      cloudy: true,
-      raining: false,
-      snowing: true
-    },
-    {
-      name: "light jacket",
-      minFeel: 15,
-      maxFeel: 30,
-      day: true,
-      night: true,
-      clear: true,
-      cloudy: true,
-      raining: true,
-      snowing: true
-    },
-    { 
-      name: "shorts",
-      minFeel: 25,
-      maxFeel: 120,
-      day: true,
-      night: true,
-      clear: true,
-      cloudy: true,
-      raining: true,
-      snowing: true
-    }
-  ];
-}
 
 /** 
  * Deletes any existing rule elements on the page
