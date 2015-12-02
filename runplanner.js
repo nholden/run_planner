@@ -67,6 +67,7 @@ rulesButtonsDiv.appendChild(saveButton);
 saveButton.addEventListener("click", function() {
   saveRules();
   showPlanner();
+  update();
 });
 
 var resetButton = document.createElement("button");
