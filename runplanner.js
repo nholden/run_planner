@@ -62,7 +62,7 @@ rulesButtonsDiv.style.display = "none";
 container.appendChild(rulesButtonsDiv);
 
 var saveButton = document.createElement("button");
-saveButton.textContent = "Save rules";
+saveButton.textContent = "Save";
 rulesButtonsDiv.appendChild(saveButton);
 saveButton.addEventListener("click", function() {
   saveRules();
@@ -70,11 +70,21 @@ saveButton.addEventListener("click", function() {
   update();
 });
 
+var cancelButton = document.createElement("button");
+cancelButton.textContent = "Cancel";
+rulesButtonsDiv.appendChild(cancelButton);
+cancelButton.addEventListener("click", function() {
+  showPlanner();
+  update();
+});
+
 var resetButton = document.createElement("button");
-resetButton.textContent = "Reset";
+resetButton.textContent = "Reset to defaults";
 rulesButtonsDiv.appendChild(resetButton);
 resetButton.addEventListener("click", function() {
-  showRules();
+  resetRules();
+  showPlanner();
+  update();
 });
 
 /** 
@@ -85,6 +95,12 @@ var rules = localStorage.getItem("rules");
 if (rules) {
   rules = JSON.parse(rules);
 } else {
+  resetRules();
+}
+
+/* Resets rules to default. */
+function resetRules() {
+  localStorage.removeItem("rules");
   rules = [
     {
       name: "winter hat",
