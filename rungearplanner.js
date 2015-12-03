@@ -262,7 +262,12 @@ function update() {
     }
     var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
     cityLink.textContent = weather.city;
-    weatherDiv.innerHTML = "<div id='cond'><i class='wi wi-wu-" + weather.icon + "'></i></div>" +
+    var weatherIconClass = "wi wi-wu-";
+    if (!weather.isDay) {
+      weatherIconClass += "night-";
+    }
+    weatherIconClass += weather.icon;
+    weatherDiv.innerHTML = "<div id='cond'><i class='" + weatherIconClass + "'></i></div>" +
                            "<div id='temp'>" + weather.temp + "&deg;F</div>" +
                            "<div id='wind'>" + weather.wind + " mph</div>" +
                            "<div id='timeOutput'>" + weather.time + "</div>";

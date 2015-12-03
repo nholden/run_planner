@@ -1782,56 +1782,116 @@
 .wi-wu-chanceflurries:before {
   content: "\f064";
 }
+.wi-wu-night-chanceflurries:before {
+  content: "\f038";
+}
 .wi-wu-chancerain:before {
   content: "\f019";
 }
-.wi-wu-chancesleat:before {
+.wi-wu-night-chancerain:before {
+  content: "\f036";
+}
+.wi-wu-chancesleet:before {
+  content: "\f0b5";
+}
+.wi-wu-night-chancesleet:before {
   content: "\f0b5";
 }
 .wi-wu-chancesnow:before {
   content: "\f01b";
 }
+.wi-wu-night-chancesnow:before {
+  content: "\f038";
+}
 .wi-wu-chancetstorms:before {
   content: "\f01e";
+}
+.wi-wu-night-chancetstorms:before {
+  content: "\f033";
 }
 .wi-wu-clear:before {
   content: "\f00d";
 }
+.wi-wu-night-clear:before {
+  content: "\f02e";
+}
 .wi-wu-cloudy:before {
   content: "\f002";
+}
+.wi-wu-night-cloudy:before {
+  content: "\f031";
 }
 .wi-wu-flurries:before {
   content: "\f064";
 }
+.wi-wu-night-flurries:before {
+  content: "\f038";
+}
+.wi-wu-fog:before {
+  content: "\f003";
+}
+.wi-wu-night-fog:before {
+  content: "\f04a";
+}
 .wi-wu-hazy:before {
   content: "\f0b6";
+}
+.wi-wu-night-hazy:before {
+  content: "\f02e";
 }
 .wi-wu-mostlycloudy:before {
   content: "\f002";
 }
+.wi-wu-night-mostlycloudy:before {
+  content: "\f031";
+}
 .wi-wu-mostlysunny:before {
   content: "\f00d";
+}
+.wi-wu-night-mostlysunny:before {
+  content: "\f02e";
 }
 .wi-wu-partlycloudy:before {
   content: "\f002";
 }
+.wi-wu-night-partlycloudy:before {
+  content: "\f083";
+}
 .wi-wu-partlysunny:before {
   content: "\f00d";
+}
+.wi-wu-night-partlysunny:before {
+  content: "\f031";
 }
 .wi-wu-rain:before {
   content: "\f01a";
 }
-.wi-wu-sleat:before {
+.wi-wu-night-rain:before {
+  content: "\f036";
+}
+.wi-wu-sleet:before {
   content: "\f0b5";
+}
+.wi-wu-night-sleet:before {
+  content: "\f0b3";
 }
 .wi-wu-snow:before {
   content: "\f01b";
 }
+.wi-wu-night-snow:before {
+  content: "\f038";
+}
 .wi-wu-sunny:before {
   content: "\f00d";
 }
+.wi-wu-night-sunny:before {
+  content: "\f02e";
+}
 .wi-wu-tstorms:before {
   content: "\f01e";
+}
+.wi-wu-night-tstorms:before {
+  content: "\f033";
 }
 .wi-wu-unknown:before {
   content: "\f00d";
