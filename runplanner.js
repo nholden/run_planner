@@ -87,9 +87,42 @@ if (rules) {
 } else {
   rules = [
     {
+      name: "winter hat",
+      minFeel: -50,
+      maxFeel: 30,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    },
+    { 
+      name: "baseball cap",
+      minFeel: 30,
+      maxFeel: 150,
+      day: true,
+      night: true,
+      clear: false,
+      cloudy: false,
+      raining: true,
+      snowing: false
+    },
+    {
+      name: "sunglasses",
+      minFeel: -50,
+      maxFeel: 150,
+      day: true,
+      night: false,
+      clear: true,
+      cloudy: false,
+      raining: false,
+      snowing: false
+    },
+    {
       name: "heavy jacket",
-      minFeel: -20,
-      maxFeel: 15,
+      minFeel: -50,
+      maxFeel: 20,
       day: true,
       night: true,
       clear: true,
@@ -99,7 +132,40 @@ if (rules) {
     },
     {
       name: "light jacket",
-      minFeel: 15,
+      minFeel: 20,
+      maxFeel: 30,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    },
+    {
+      name: "long-sleeve shirt",
+      minFeel: -50,
+      maxFeel: 40,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    },
+    {
+      name: "short-sleeve shirt",
+      minFeel: 40,
+      maxFeel: 150,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    },
+    {
+      name: "tights",
+      minFeel: -50,
       maxFeel: 30,
       day: true,
       night: true,
@@ -110,8 +176,8 @@ if (rules) {
     },
     { 
       name: "shorts",
-      minFeel: 25,
-      maxFeel: 120,
+      minFeel: 30,
+      maxFeel: 150,
       day: true,
       night: true,
       clear: true,
