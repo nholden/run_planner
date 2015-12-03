@@ -266,6 +266,7 @@ function update() {
                            "<div id='wind'>" + weather.wind + " mph</div>" +
                            "<div id='timeOutput'>" + weather.time + "</div>";
     var clothesList = document.createElement("ul");
+    clothesDiv.textContent = "";
     clothesDiv.appendChild(clothesList);
     var clothes = recommendClothes(weather);
     clothes.forEach(function(clothesItem) {
