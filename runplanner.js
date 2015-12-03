@@ -56,11 +56,11 @@ containerDiv.appendChild(thermometerDiv);
 
 var rulesDiv = document.createElement("div");
 rulesDiv.style.display = "none";
-container.appendChild(rulesDiv);
+containerDiv.appendChild(rulesDiv);
 
 var rulesButtonsDiv = document.createElement("div");
 rulesButtonsDiv.style.display = "none";
-container.appendChild(rulesButtonsDiv);
+containerDiv.appendChild(rulesButtonsDiv);
 
 var saveButton = document.createElement("button");
 saveButton.textContent = "Save";
@@ -520,7 +520,7 @@ function showRules() {
   weatherDiv.style.display = "none";
   clothesDiv.style.display = "none";
   rulesLink.style.display = "none";
-  thermometer.style.display = "block";
+  thermometerDiv.style.display = "block";
   rulesDiv.style.display = "block";
   rulesButtonsDiv.style.display = "block";
   
