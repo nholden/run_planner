@@ -43,6 +43,7 @@ containerDiv.appendChild(weatherDiv);
 var rulesLink = document.createElement("a");
 rulesLink.href = "";
 rulesLink.textContent = "You should wear:";
+rulesLink.style.display = "none";
 containerDiv.appendChild(rulesLink);
 
 var clothesDiv = document.createElement("div");
