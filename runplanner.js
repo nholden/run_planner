@@ -40,14 +40,14 @@ var weatherDiv = document.createElement("div");
 weatherDiv.id = "weather";
 containerDiv.appendChild(weatherDiv);
 
+var rulesLink = document.createElement("a");
+rulesLink.href = "";
+rulesLink.textContent = "You should wear:";
+containerDiv.appendChild(rulesLink);
+
 var clothesDiv = document.createElement("div");
 clothesDiv.id = "clothes";
 containerDiv.appendChild(clothesDiv);
-
-var rulesLink = document.createElement("a");
-rulesLink.href = "";
-rulesLink.textContent = "Change rules";
-containerDiv.appendChild(rulesLink);
 
 var thermometerDiv = document.createElement("div");
 thermometerDiv.id = "thermometer";
@@ -265,7 +265,6 @@ function update() {
                            "<div id='temp'>" + weather.temp + "&deg;F</div>" +
                            "<div id='wind'>" + weather.wind + " mph</div>" +
                            "<div id='timeOutput'>" + weather.time + "</div>";
-    clothesDiv.innerHTML = "You should wear:";
     var clothesList = document.createElement("ul");
     clothesDiv.appendChild(clothesList);
     var clothes = recommendClothes(weather);
@@ -320,7 +319,7 @@ function showPlanner() {
   timeSelect.style.display = "block";
   weatherDiv.style.display = "block";
   clothesDiv.style.display = "block";
-  rulesLink.style.display = "block";
+  rulesLink.style.display = "inline";
   thermometerDiv.style.display = "none";
   rulesDiv.style.display = "none";
   rulesButtonsDiv.style.display = "none";
