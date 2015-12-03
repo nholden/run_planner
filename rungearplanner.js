@@ -137,6 +137,17 @@ function resetRules() {
       snowing: false
     },
     {
+      name: "gloves",
+      minFeel: -50,
+      maxFeel: 40,
+      day: true,
+      night: true,
+      clear: true,
+      cloudy: true,
+      raining: true,
+      snowing: true
+    },
+    {
       name: "heavy jacket",
       minFeel: -50,
       maxFeel: 20,
