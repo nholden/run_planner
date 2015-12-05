@@ -106,7 +106,7 @@ function resetRules() {
     {
       name: "winter hat",
       minFeel: -50,
-      maxFeel: 30,
+      maxFeel: 35,
       day: true,
       night: true,
       clear: true,
@@ -116,7 +116,7 @@ function resetRules() {
     },
     { 
       name: "baseball cap",
-      minFeel: 30,
+      minFeel: 35,
       maxFeel: 150,
       day: true,
       night: true,
@@ -155,13 +155,13 @@ function resetRules() {
       night: true,
       clear: true,
       cloudy: true,
-      raining: false,
+      raining: true,
       snowing: true
     },
     {
       name: "light jacket",
       minFeel: 20,
-      maxFeel: 30,
+      maxFeel: 35,
       day: true,
       night: true,
       clear: true,
@@ -172,7 +172,7 @@ function resetRules() {
     {
       name: "long-sleeve shirt",
       minFeel: -50,
-      maxFeel: 40,
+      maxFeel: 45,
       day: true,
       night: true,
       clear: true,
@@ -182,7 +182,7 @@ function resetRules() {
     },
     {
       name: "short-sleeve shirt",
-      minFeel: 40,
+      minFeel: 45,
       maxFeel: 150,
       day: true,
       night: true,
@@ -194,7 +194,7 @@ function resetRules() {
     {
       name: "tights",
       minFeel: -50,
-      maxFeel: 30,
+      maxFeel: 35,
       day: true,
       night: true,
       clear: true,
@@ -204,7 +204,7 @@ function resetRules() {
     },
     { 
       name: "shorts",
-      minFeel: 30,
+      minFeel: 35,
       maxFeel: 150,
       day: true,
       night: true,
