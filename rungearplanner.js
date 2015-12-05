@@ -632,6 +632,17 @@ function showRules() {
       checkboxDiv.appendChild(checkboxLabel);
     });
 
+    var deleteDiv = document.createElement("div");
+    itemCriteriaDiv.appendChild(deleteDiv);
+    var deleteLink = document.createElement("a");
+    deleteLink.textContent = "Delete";
+    deleteLink.href = "";
+    deleteDiv.appendChild(deleteLink);
+    deleteLink.addEventListener("click", function(event) {
+      event.preventDefault();
+      rulesDiv.removeChild(itemDiv);
+    });
+
     itemBarDiv.addEventListener("click", function() {
       var allItemCriteriaDivs = document.querySelectorAll(".clothingCriteria");
       var wasHidden = itemCriteriaDiv.style.display == "none";
