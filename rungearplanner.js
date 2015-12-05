@@ -58,6 +58,22 @@ var rulesDiv = document.createElement("div");
 rulesDiv.style.display = "none";
 containerDiv.appendChild(rulesDiv);
 
+var addRuleDiv = document.createElement("div");
+addRuleDiv.style.display = "none";
+addRuleDiv.style.margin = "0.5em 0";
+containerDiv.appendChild(addRuleDiv);
+
+var addRuleLink = document.createElement("a");
+addRuleLink.textContent = "Add rule";
+addRuleLink.href = "";
+addRuleDiv.appendChild(addRuleLink);
+addRuleLink.addEventListener("click", function(event) {
+  event.preventDefault();
+  buildRule(new Item("new item"), rules.length);
+  var newRuleCriteriaDiv = document.querySelector("#clothingCriteria" + rules.length);
+  newRuleCriteriaDiv.style.display = "block";
+});
+
 var rulesButtonsDiv = document.createElement("div");
 rulesButtonsDiv.style.display = "none";
 containerDiv.appendChild(rulesButtonsDiv);
@@ -314,6 +330,7 @@ function showZipCodeEntry() {
   rulesLink.style.display = "none";
   thermometerDiv.style.display = "none";
   rulesDiv.style.display = "none";
+  addRuleDiv.style.display = "none";
   rulesButtonsDiv.style.display = "none";
 }
 
@@ -340,6 +357,7 @@ function showPlanner() {
   rulesLink.style.display = "inline";
   thermometerDiv.style.display = "none";
   rulesDiv.style.display = "none";
+  addRuleDiv.style.display = "none";
   rulesButtonsDiv.style.display = "none";
 } 
 
@@ -538,121 +556,142 @@ function showRules() {
   rulesLink.style.display = "none";
   thermometerDiv.style.display = "block";
   rulesDiv.style.display = "block";
+  addRuleDiv.style.display = "block";
   rulesButtonsDiv.style.display = "block";
   
   rules.forEach(function(item, index) {
-    var itemDiv = document.createElement("div");
-    itemDiv.className = "clothingRule";
-    rulesDiv.appendChild(itemDiv);
+    buildRule(item, index);
+  });
+}
 
-    var itemBarDiv = document.createElement("div");
-    itemBarDiv.className = "clothingBar";
-    itemBarDiv.textContent = item.name;
-    updateItemBarBG(item.minFeel, item.maxFeel);
-    itemDiv.appendChild(itemBarDiv);
+/* Constructs a new item object */
+function Item(name) {
+  this.name = name;
+  this.minFeel = "";
+  this.maxFeel = "";
+  this.day = false;
+  this.night = false;
+  this.clear = false;
+  this.cloudy = false;
+  this.raining = false;
+  this.snowing = false;
+}
+
+/* Creates page elements for a rule given an item */
+function buildRule(item, index) {
+  var itemDiv = document.createElement("div");
+  itemDiv.className = "clothingRule";
+  itemDiv.style.margin = "0.5em 0";
+  rulesDiv.appendChild(itemDiv);
+
+  var itemBarDiv = document.createElement("div");
+  itemBarDiv.className = "clothingBar";
+  itemBarDiv.textContent = item.name;
+  updateItemBarBG(item.minFeel, item.maxFeel);
+  itemDiv.appendChild(itemBarDiv);
 
 /** 
  * Given a minimum feel temp and a maximum feel temp,
  * updates the background color of itemBarDiv to reflect
  * where along the thermometer the rule falls.
  */
-    function updateItemBarBG(minFeel, maxFeel) {
-      var itemBarDivStartPercent = (parseInt(minFeel) + 20)/1.4;
-      var itemBarDivEndPercent = (parseInt(maxFeel) + 20)/1.4;
-      itemBarDiv.style.background = "linear-gradient(to right, transparent, transparent " +
-                                    itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
-                                    itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
-                                    itemBarDivEndPercent + "%, transparent " +
-                                    itemBarDivEndPercent + "%, transparent 100%)";
+  function updateItemBarBG(minFeel, maxFeel) {
+    var itemBarDivStartPercent = (parseInt(minFeel) + 20)/1.4;
+    var itemBarDivEndPercent = (parseInt(maxFeel) + 20)/1.4;
+    itemBarDiv.style.background = "linear-gradient(to right, transparent, transparent " +
+                                  itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                                  itemBarDivStartPercent + "%, rgba(255,255,255,0.3) " + 
+                                  itemBarDivEndPercent + "%, transparent " +
+                                  itemBarDivEndPercent + "%, transparent 100%)";
+  }
+
+  var itemCriteriaDiv = document.createElement("div");
+  itemDiv.appendChild(itemCriteriaDiv);
+  itemCriteriaDiv.className = "clothingCriteria";
+  itemCriteriaDiv.id = "clothingCriteria" + index;
+  itemCriteriaDiv.style.display = "none";
+
+  var textSpan0 = document.createElement("span");
+  textSpan0.innerHTML = "Wear";
+  itemCriteriaDiv.appendChild(textSpan0);
+
+  var itemNameInput = document.createElement("input");
+  itemNameInput.type = "text";
+  itemNameInput.className = "itemName";
+  itemNameInput.defaultValue = item.name;
+  itemNameInput.size = "15";
+  itemNameInput.addEventListener("input", function() {
+    itemBarDiv.textContent = itemNameInput.value;
+  });
+  itemCriteriaDiv.appendChild(itemNameInput);
+
+  var textSpan1 = document.createElement("span");
+  textSpan1.innerHTML = "when it feels warmer than or equal to";
+  itemCriteriaDiv.appendChild(textSpan1);
+
+  var itemMinFeelInput = document.createElement("input");
+  itemMinFeelInput.type = "text";
+  itemMinFeelInput.className = "itemMinFeel";
+  itemMinFeelInput.defaultValue = item.minFeel;
+  itemMinFeelInput.size = "5";
+  itemMinFeelInput.addEventListener("change", function() {
+    updateItemBarBG(itemMinFeelInput.value, itemMaxFeelInput.value);
+  });
+  itemCriteriaDiv.appendChild(itemMinFeelInput);
+
+  var textSpan2 = document.createElement("span");
+  textSpan2.innerHTML = "&deg;F and it feels cooler than";
+  itemCriteriaDiv.appendChild(textSpan2);
+
+  var itemMaxFeelInput = document.createElement("input");
+  itemMaxFeelInput.type = "text";
+  itemMaxFeelInput.className = "itemMaxFeel";
+  itemMaxFeelInput.defaultValue = item.maxFeel;
+  itemMaxFeelInput.size = "5";
+  itemMaxFeelInput.addEventListener("change", function() {
+    updateItemBarBG(itemMinFeelInput.value, itemMaxFeelInput.value);
+  });
+  itemCriteriaDiv.appendChild(itemMaxFeelInput);
+
+  var textSpan3 = document.createElement("span");
+  textSpan3.innerHTML = "&deg;F and it is...";
+  itemCriteriaDiv.appendChild(textSpan3);
+
+  var conditions = ["day", "night", "clear", "cloudy", "raining", "snowing"];
+  conditions.forEach(function(condition) {
+    var checkboxDiv = document.createElement("div");
+    itemCriteriaDiv.appendChild(checkboxDiv);
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = condition;
+    checkbox.checked = item[condition];
+    checkboxDiv.appendChild(checkbox);
+    var checkboxLabel = document.createElement("label");
+    checkboxLabel.htmlFor = condition;
+    checkboxLabel.textContent = condition;
+    checkboxDiv.appendChild(checkboxLabel);
+  });
+
+  var deleteDiv = document.createElement("div");
+  itemCriteriaDiv.appendChild(deleteDiv);
+  var deleteLink = document.createElement("a");
+  deleteLink.textContent = "Delete";
+  deleteLink.href = "";
+  deleteDiv.appendChild(deleteLink);
+  deleteLink.addEventListener("click", function(event) {
+    event.preventDefault();
+    rulesDiv.removeChild(itemDiv);
+  });
+
+  itemBarDiv.addEventListener("click", function() {
+    var allItemCriteriaDivs = document.querySelectorAll(".clothingCriteria");
+    var wasHidden = itemCriteriaDiv.style.display == "none";
+    for (var i = 0; i < allItemCriteriaDivs.length; i++) {
+      allItemCriteriaDivs[i].style.display = "none";
     }
-
-    var itemCriteriaDiv = document.createElement("div");
-    itemDiv.appendChild(itemCriteriaDiv);
-    itemCriteriaDiv.className = "clothingCriteria";
-    itemCriteriaDiv.style.display = "none";
-
-    var textSpan0 = document.createElement("span");
-    textSpan0.innerHTML = "Wear";
-    itemCriteriaDiv.appendChild(textSpan0);
-
-    var itemNameInput = document.createElement("input");
-    itemNameInput.type = "text";
-    itemNameInput.className = "itemName";
-    itemNameInput.defaultValue = item.name;
-    itemNameInput.size = "15";
-    itemNameInput.addEventListener("input", function() {
-      itemBarDiv.textContent = itemNameInput.value;
-    });
-    itemCriteriaDiv.appendChild(itemNameInput);
-
-    var textSpan1 = document.createElement("span");
-    textSpan1.innerHTML = "when it feels warmer than or equal to";
-    itemCriteriaDiv.appendChild(textSpan1);
- 
-    var itemMinFeelInput = document.createElement("input");
-    itemMinFeelInput.type = "text";
-    itemMinFeelInput.className = "itemMinFeel";
-    itemMinFeelInput.defaultValue = item.minFeel;
-    itemMinFeelInput.size = "5";
-    itemMinFeelInput.addEventListener("change", function() {
-      updateItemBarBG(itemMinFeelInput.value, itemMaxFeelInput.value);
-    });
-    itemCriteriaDiv.appendChild(itemMinFeelInput);
-
-    var textSpan2 = document.createElement("span");
-    textSpan2.innerHTML = "&deg;F and it feels cooler than";
-    itemCriteriaDiv.appendChild(textSpan2);
-
-    var itemMaxFeelInput = document.createElement("input");
-    itemMaxFeelInput.type = "text";
-    itemMaxFeelInput.className = "itemMaxFeel";
-    itemMaxFeelInput.defaultValue = item.maxFeel;
-    itemMaxFeelInput.size = "5";
-    itemMaxFeelInput.addEventListener("change", function() {
-      updateItemBarBG(itemMinFeelInput.value, itemMaxFeelInput.value);
-    });
-    itemCriteriaDiv.appendChild(itemMaxFeelInput);
-
-    var textSpan3 = document.createElement("span");
-    textSpan3.innerHTML = "&deg;F and it is...";
-    itemCriteriaDiv.appendChild(textSpan3);
-
-    var conditions = ["day", "night", "clear", "cloudy", "raining", "snowing"];
-    conditions.forEach(function(condition) {
-      var checkboxDiv = document.createElement("div");
-      itemCriteriaDiv.appendChild(checkboxDiv);
-      var checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.id = condition;
-      checkbox.checked = item[condition];
-      checkboxDiv.appendChild(checkbox);
-      var checkboxLabel = document.createElement("label");
-      checkboxLabel.htmlFor = condition;
-      checkboxLabel.textContent = condition;
-      checkboxDiv.appendChild(checkboxLabel);
-    });
-
-    var deleteDiv = document.createElement("div");
-    itemCriteriaDiv.appendChild(deleteDiv);
-    var deleteLink = document.createElement("a");
-    deleteLink.textContent = "Delete";
-    deleteLink.href = "";
-    deleteDiv.appendChild(deleteLink);
-    deleteLink.addEventListener("click", function(event) {
-      event.preventDefault();
-      rulesDiv.removeChild(itemDiv);
-    });
-
-    itemBarDiv.addEventListener("click", function() {
-      var allItemCriteriaDivs = document.querySelectorAll(".clothingCriteria");
-      var wasHidden = itemCriteriaDiv.style.display == "none";
-      for (var i = 0; i < allItemCriteriaDivs.length; i++) {
-        allItemCriteriaDivs[i].style.display = "none";
-      }
-      if (wasHidden) {
-        itemCriteriaDiv.style.display = "block";
-      }
-    });
+    if (wasHidden) {
+      itemCriteriaDiv.style.display = "block";
+    }
   });
 }
 
@@ -665,7 +704,7 @@ function saveRules() {
   var rulesDivs = document.querySelectorAll(".clothingRule"); 
   for (var i = 0; i < rulesDivs.length; i++) {
     newRules.push({
-      name: rulesDivs[i].querySelector(".itemName").value,
+     name: rulesDivs[i].querySelector(".itemName").value,
       minFeel: rulesDivs[i].querySelector(".itemMinFeel").value,
       maxFeel: rulesDivs[i].querySelector(".itemMaxFeel").value,
       day: rulesDivs[i].querySelector("#day").checked,
