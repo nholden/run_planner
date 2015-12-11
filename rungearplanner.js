@@ -243,7 +243,6 @@ function resetRules() {
   ];
 }
 
-
 /**
  * Checks local storage for a saved zip code. If found and
  * successfully able to update the page, shows the planner.
@@ -255,6 +254,8 @@ if (savedZip) {
   if (update()) {
     showPlanner();
   }
+} else {
+  showZipCodeEntry();
 }
 
 /**
