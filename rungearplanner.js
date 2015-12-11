@@ -1,67 +1,79 @@
-/* Creates page elements. */
+/* Creates page container div. */
 var containerDiv = document.createElement("div");
 containerDiv.id = "container";
 document.body.appendChild(containerDiv);
 
-var locationDiv = document.createElement("div");
-locationDiv.id = "location";
-locationDiv.textContent = "Running in ";
-containerDiv.appendChild(locationDiv);
-
-var cityLink = document.createElement("a");
-cityLink.href = "";
-locationDiv.appendChild(cityLink);
+/* Creates page elements for the zip code entry view. */
+var zipCodeEntryDiv = document.createElement("div");
+zipCodeEntryDiv.id = "zipCodeEntry";
+containerDiv.appendChild(zipCodeEntryDiv);
 
 var zipCodeInput = document.createElement("input");
 zipCodeInput.type = "text";
 zipCodeInput.id = "zipCode";
 zipCodeInput.placeholder = "Zip code";
-containerDiv.appendChild(zipCodeInput);
+zipCodeEntryDiv.appendChild(zipCodeInput);
 
 var setLocationButton = document.createElement("button");
 setLocationButton.textContent = "Set location";
 setLocationButton.id = "setLocation";
-containerDiv.appendChild(setLocationButton);
+zipCodeEntryDiv.appendChild(setLocationButton);
+
+var errorDiv = document.createElement("div");
+errorDiv.id = "error";
+zipCodeEntryDiv.appendChild(errorDiv);
+
+/* Creates page elements for the planner view. */
+var plannerDiv = document.createElement("div");
+plannerDiv.id = "planner";
+containerDiv.appendChild(plannerDiv);
+
+var locationDiv = document.createElement("div");
+locationDiv.id = "location";
+locationDiv.textContent = "Running in ";
+plannerDiv.appendChild(locationDiv);
+
+var cityLink = document.createElement("a");
+cityLink.href = "";
+locationDiv.appendChild(cityLink);
 
 var timeSelect = document.createElement("select");
 timeSelect.id = "time";
-containerDiv.appendChild(timeSelect);
+plannerDiv.appendChild(timeSelect);
 
 var nowOption = document.createElement("option");
 nowOption.textContent = "Now";
 nowOption.value = "now";
 timeSelect.appendChild(nowOption);
 
-var errorDiv = document.createElement("div");
-errorDiv.id = "error";
-containerDiv.appendChild(errorDiv);
-
 var weatherDiv = document.createElement("div");
 weatherDiv.id = "weather";
-containerDiv.appendChild(weatherDiv);
+plannerDiv.appendChild(weatherDiv);
 
 var rulesLink = document.createElement("a");
 rulesLink.href = "";
 rulesLink.textContent = "You should wear:";
-rulesLink.style.display = "none";
-containerDiv.appendChild(rulesLink);
+plannerDiv.appendChild(rulesLink);
 
 var clothesDiv = document.createElement("div");
 clothesDiv.id = "clothes";
-containerDiv.appendChild(clothesDiv);
+plannerDiv.appendChild(clothesDiv);
+
+/* Creates page elements for the edit rules view. */
+var editRulesDiv = document.createElement("div");
+editRulesDiv.id = "editRules";
+containerDiv.appendChild(editRulesDiv);
 
 var thermometerDiv = document.createElement("div");
 thermometerDiv.id = "thermometer";
-containerDiv.appendChild(thermometerDiv);
+editRulesDiv.appendChild(thermometerDiv);
 
 var rulesDiv = document.createElement("div");
-rulesDiv.style.display = "none";
-containerDiv.appendChild(rulesDiv);
+editRulesDiv.appendChild(rulesDiv);
 
 var addRuleDiv = document.createElement("div");
-addRuleDiv.style.display = "none";
 addRuleDiv.style.margin = "0.5em 0";
-containerDiv.appendChild(addRuleDiv);
+editRulesDiv.appendChild(addRuleDiv);
 
 var addRuleLink = document.createElement("a");
 addRuleLink.textContent = "Add rule";
@@ -75,8 +87,7 @@ addRuleLink.addEventListener("click", function(event) {
 });
 
 var rulesButtonsDiv = document.createElement("div");
-rulesButtonsDiv.style.display = "none";
-containerDiv.appendChild(rulesButtonsDiv);
+editRulesDiv.appendChild(rulesButtonsDiv);
 
 var saveButton = document.createElement("button");
 saveButton.textContent = "Save";
@@ -319,19 +330,9 @@ function update() {
 /* Shows page elements associated with zip code entry. */
 function showZipCodeEntry() {
   resetTimeOptions();
-  locationDiv.style.display = "none";
-  zipCodeInput.style.display = "inline";
-  setLocationButton.style.display = "inline";
-  timeSelect.style.display = "none";
-  weatherDiv.style.display = "none";
-  weatherDiv.textContent = null;
-  clothesDiv.style.display = "none";
-  clothesDiv.textContent = null;
-  rulesLink.style.display = "none";
-  thermometerDiv.style.display = "none";
-  rulesDiv.style.display = "none";
-  addRuleDiv.style.display = "none";
-  rulesButtonsDiv.style.display = "none";
+  zipCodeEntryDiv.style.display = "block";
+  plannerDiv.style.display = "none";
+  editRulesDiv.style.display = "none";
 }
 
 /** 
@@ -348,17 +349,9 @@ function showPlanner() {
     timeSelect.appendChild(hourOption);
   });
 
-  locationDiv.style.display = "block";
-  zipCodeInput.style.display = "none";
-  setLocationButton.style.display = "none";
-  timeSelect.style.display = "block";
-  weatherDiv.style.display = "block";
-  clothesDiv.style.display = "block";
-  rulesLink.style.display = "inline";
-  thermometerDiv.style.display = "none";
-  rulesDiv.style.display = "none";
-  addRuleDiv.style.display = "none";
-  rulesButtonsDiv.style.display = "none";
+  zipCodeEntryDiv.style.display = "none";
+  plannerDiv.style.display = "block";
+  editRulesDiv.style.display = "none";
 } 
 
 /* Removes all options from time select and rebuilds now option */
@@ -547,17 +540,9 @@ rulesLink.addEventListener("click", function(event) {
  */
 function showRules() {
   removeRules(); 
-  locationDiv.style.display = "none";
-  zipCodeInput.style.display = "none";
-  setLocationButton.style.display = "none";
-  timeSelect.style.display = "none";
-  weatherDiv.style.display = "none";
-  clothesDiv.style.display = "none";
-  rulesLink.style.display = "none";
-  thermometerDiv.style.display = "block";
-  rulesDiv.style.display = "block";
-  addRuleDiv.style.display = "block";
-  rulesButtonsDiv.style.display = "block";
+  zipCodeEntryDiv.style.display = "none";
+  plannerDiv.style.display = "none";
+  editRulesDiv.style.display = "block";
   
   rules.forEach(function(item, index) {
     buildRule(item, index);
