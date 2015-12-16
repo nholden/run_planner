@@ -1,27 +1,11 @@
 /* Creates page container div. */
-var containerDiv = document.createElement("div");
-containerDiv.id = "container";
-document.body.appendChild(containerDiv);
+var containerDiv = document.querySelector("#container");
 
 /* Creates page elements for the zip code entry view. */
-var zipCodeEntryDiv = document.createElement("div");
-zipCodeEntryDiv.id = "zipCodeEntry";
-containerDiv.appendChild(zipCodeEntryDiv);
-
-var zipCodeInput = document.createElement("input");
-zipCodeInput.type = "text";
-zipCodeInput.id = "zipCode";
-zipCodeInput.placeholder = "Zip code";
-zipCodeEntryDiv.appendChild(zipCodeInput);
-
-var setLocationButton = document.createElement("button");
-setLocationButton.textContent = "Set location";
-setLocationButton.id = "setLocation";
-zipCodeEntryDiv.appendChild(setLocationButton);
-
-var errorDiv = document.createElement("div");
-errorDiv.id = "error";
-zipCodeEntryDiv.appendChild(errorDiv);
+var zipCodeEntryDiv = document.querySelector("#zipCodeEntry");
+var zipCodeInput = document.querySelector("#zipCode")
+var setLocationButton = document.querySelector("#setLocation");
+var errorDiv = document.querySelector("#error");
 
 /* Creates page elements for the planner view. */
 var plannerDiv = document.createElement("div");
