@@ -43,6 +43,7 @@ input, select, button {
   font-size: 1em;
   font-weight: 200;
   text-align: center;
+  white-space: normal;
 }
 
 div {
@@ -54,6 +55,10 @@ a {
   color: #000000;
   font-weight: 400;
   text-decoration: none;
+}
+
+#zipCodeEntry {
+  white-space: nowrap;
 }
 
 #location {
