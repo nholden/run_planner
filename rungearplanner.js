@@ -8,40 +8,14 @@ var setLocationButton = document.querySelector("#setLocation");
 var errorDiv = document.querySelector("#error");
 
 /* Creates page elements for the planner view. */
-var plannerDiv = document.createElement("div");
-plannerDiv.id = "planner";
-containerDiv.appendChild(plannerDiv);
-
-var locationDiv = document.createElement("div");
-locationDiv.id = "location";
-locationDiv.textContent = "Running in ";
-plannerDiv.appendChild(locationDiv);
-
-var cityLink = document.createElement("a");
-cityLink.href = "";
-locationDiv.appendChild(cityLink);
-
-var timeSelect = document.createElement("select");
-timeSelect.id = "time";
-plannerDiv.appendChild(timeSelect);
-
-var nowOption = document.createElement("option");
-nowOption.textContent = "Now";
-nowOption.value = "now";
-timeSelect.appendChild(nowOption);
-
-var weatherDiv = document.createElement("div");
-weatherDiv.id = "weather";
-plannerDiv.appendChild(weatherDiv);
-
-var rulesLink = document.createElement("a");
-rulesLink.href = "";
-rulesLink.textContent = "You should wear:";
-plannerDiv.appendChild(rulesLink);
-
-var clothesDiv = document.createElement("div");
-clothesDiv.id = "clothes";
-plannerDiv.appendChild(clothesDiv);
+var plannerDiv = document.querySelector("#planner");
+var locationDiv = document.querySelector("#location");
+var cityLink = document.querySelector("#city");
+var timeSelect = document.querySelector("#time");
+var nowOption = document.querySelector("#now");
+var weatherDiv = document.querySelector("#weather");
+var rulesLink = document.querySelector("#rules");
+var clothesDiv = document.querySelector("#clothes");
 
 /* Creates page elements for the edit rules view. */
 var editRulesDiv = document.createElement("div");
