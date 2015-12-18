@@ -57,11 +57,11 @@ a {
   text-decoration: none;
 }
 
-#zipCodeEntry, #planner, #editrules {
+#enterLocationView, #mainView, #editRulesView {
   display: none;
 }
 
-#zipCodeEntry {
+#enterLocationView {
   white-space: nowrap;
 }
 

@@ -1,14 +1,11 @@
-/* Creates page container div. */
-var containerDiv = document.querySelector("#container");
-
 /* Creates page elements for the zip code entry view. */
-var zipCodeEntryDiv = document.querySelector("#zipCodeEntry");
+var enterLocationView = document.querySelector("#enterLocationView");
 var zipCodeInput = document.querySelector("#zipCode")
 var setLocationButton = document.querySelector("#setLocation");
 var errorDiv = document.querySelector("#error");
 
-/* Creates page elements for the planner view. */
-var plannerDiv = document.querySelector("#planner");
+/* Creates page elements for the main view. */
+var mainView = document.querySelector("#mainView");
 var locationDiv = document.querySelector("#location");
 var cityLink = document.querySelector("#city");
 var timeSelect = document.querySelector("#time");
@@ -18,7 +15,7 @@ var rulesLink = document.querySelector("#rulesLink");
 var clothesDiv = document.querySelector("#clothes");
 
 /* Creates page elements for the edit rules view. */
-var editRulesDiv = document.querySelector("#editRules");
+var editRulesView = document.querySelector("#editRulesView");
 var thermometerDiv = document.querySelector("#thermometer");
 var rulesDiv = document.querySelector("#rules");
 var addRuleDiv = document.querySelector("#addRule");
@@ -267,9 +264,9 @@ function update() {
 /* Shows page elements associated with zip code entry. */
 function showZipCodeEntry() {
   resetTimeOptions();
-  zipCodeEntryDiv.style.display = "block";
-  plannerDiv.style.display = "none";
-  editRulesDiv.style.display = "none";
+  enterLocationView.style.display = "block";
+  mainView.style.display = "none";
+  editRulesView.style.display = "none";
 }
 
 /** 
@@ -286,9 +283,9 @@ function showPlanner() {
     timeSelect.appendChild(hourOption);
   });
 
-  zipCodeEntryDiv.style.display = "none";
-  plannerDiv.style.display = "block";
-  editRulesDiv.style.display = "none";
+  enterLocationView.style.display = "none";
+  mainView.style.display = "block";
+  editRulesView.style.display = "none";
 } 
 
 /* Removes all options from time select and rebuilds now option */
@@ -477,9 +474,9 @@ rulesLink.addEventListener("click", function(event) {
  */
 function showRules() {
   removeRules(); 
-  zipCodeEntryDiv.style.display = "none";
-  plannerDiv.style.display = "none";
-  editRulesDiv.style.display = "block";
+  enterLocationView.style.display = "none";
+  mainView.style.display = "none";
+  editRulesView.style.display = "block";
   
   rules.forEach(function(item, index) {
     buildRule(item, index);
