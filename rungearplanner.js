@@ -14,29 +14,15 @@ var cityLink = document.querySelector("#city");
 var timeSelect = document.querySelector("#time");
 var nowOption = document.querySelector("#now");
 var weatherDiv = document.querySelector("#weather");
-var rulesLink = document.querySelector("#rules");
+var rulesLink = document.querySelector("#rulesLink");
 var clothesDiv = document.querySelector("#clothes");
 
 /* Creates page elements for the edit rules view. */
-var editRulesDiv = document.createElement("div");
-editRulesDiv.id = "editRules";
-containerDiv.appendChild(editRulesDiv);
-
-var thermometerDiv = document.createElement("div");
-thermometerDiv.id = "thermometer";
-editRulesDiv.appendChild(thermometerDiv);
-
-var rulesDiv = document.createElement("div");
-editRulesDiv.appendChild(rulesDiv);
-
-var addRuleDiv = document.createElement("div");
-addRuleDiv.style.margin = "0.5em 0";
-editRulesDiv.appendChild(addRuleDiv);
-
-var addRuleLink = document.createElement("a");
-addRuleLink.textContent = "Add rule";
-addRuleLink.href = "";
-addRuleDiv.appendChild(addRuleLink);
+var editRulesDiv = document.querySelector("#editRules");
+var thermometerDiv = document.querySelector("#thermometer");
+var rulesDiv = document.querySelector("#rules");
+var addRuleDiv = document.querySelector("#addRule");
+var addRuleLink = document.querySelector("#addRuleLink");
 addRuleLink.addEventListener("click", function(event) {
   event.preventDefault();
   buildRule(new Item("new item"), rules.length);
@@ -44,29 +30,21 @@ addRuleLink.addEventListener("click", function(event) {
   newRuleCriteriaDiv.style.display = "block";
 });
 
-var rulesButtonsDiv = document.createElement("div");
-editRulesDiv.appendChild(rulesButtonsDiv);
-
-var saveButton = document.createElement("button");
-saveButton.textContent = "Save";
-rulesButtonsDiv.appendChild(saveButton);
+var rulesButtonsDiv = document.querySelector("#rulesButtons");
+var saveButton = document.querySelector("#save");
 saveButton.addEventListener("click", function() {
   saveRules();
   showPlanner();
   update();
 });
 
-var cancelButton = document.createElement("button");
-cancelButton.textContent = "Cancel";
-rulesButtonsDiv.appendChild(cancelButton);
+var cancelButton = document.querySelector("#cancel");
 cancelButton.addEventListener("click", function() {
   showPlanner();
   update();
 });
 
-var resetButton = document.createElement("button");
-resetButton.textContent = "Reset to defaults";
-rulesButtonsDiv.appendChild(resetButton);
+var resetButton = document.querySelector("#reset");
 resetButton.addEventListener("click", function() {
   resetRules();
   showPlanner();
