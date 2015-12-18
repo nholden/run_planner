@@ -18,18 +18,18 @@ document.querySelector("#addRuleLink").addEventListener("click", function(event)
 /* Adds functionality to save, cancel, and reset buttons */
 document.querySelector("#save").addEventListener("click", function() {
   saveRules();
-  showPlanner();
+  showMainView();
   update();
 });
 
 document.querySelector("#cancel").addEventListener("click", function() {
-  showPlanner();
+  showMainView();
   update();
 });
 
 document.querySelector("#reset").addEventListener("click", function() {
   resetRules();
-  showPlanner();
+  showMainView();
   update();
 });
 
@@ -163,28 +163,28 @@ function resetRules() {
 
 /**
  * Checks local storage for a saved zip code. If found and
- * successfully able to update the page, shows the planner.
- * Otherwise, defaults to prompting the user for a zip code.
+ * successfully able to update the page, shows the main view.
+ * Otherwise, shows the enter location view.
  */
 var weatherInZip, savedZip = localStorage.getItem("zipCode");
 if (savedZip) {
   weatherInZip = getWeatherInZip(savedZip);
   if (update()) {
-    showPlanner();
+    showMainView();
   }
 } else {
-  showZipCodeEntry();
+  showEnterLocationView();
 }
 
 /**
  * When the user clicks the set location button, saves 
- * zip code to local storage and shows the planner. 
+ * zip code to local storage and shows the main view. 
  */
 document.querySelector("#setLocation").addEventListener("click", function(event) {
   event.preventDefault();
   if (update()) {
     localStorage.setItem("zipCode", zipCodeInput.value);
-    showPlanner();
+    showMainView();
   }
 });
 
@@ -195,13 +195,13 @@ timeSelect.addEventListener("change", function() {
 
 /**
  * When the user clicks name of city, removes zip code
- * from local storage and prompts the user for a zip code.
+ * from local storage and shows enter location view.
  */
 cityLink.addEventListener("click", function(event) {
   event.preventDefault();
   localStorage.removeItem("zipCode");
   weatherInZip = null;
-  showZipCodeEntry();
+  showEnterLocationView();
 });
 
 /**
@@ -249,8 +249,8 @@ function update() {
   }
 }
 
-/* Shows page elements associated with zip code entry. */
-function showZipCodeEntry() {
+/* Shows page elements associated with entering location. */
+function showEnterLocationView() {
   resetTimeOptions();
   enterLocationView.style.display = "block";
   mainView.style.display = "none";
@@ -258,10 +258,10 @@ function showZipCodeEntry() {
 }
 
 /** 
- * Generate time options based on time zone in zip code 
- * and shows page elements associated with run planning. 
+ * Generate time options based on time zone
+ * in zip code and shows the main view. 
  */
-function showPlanner() {
+function showMainView() {
   resetTimeOptions();
 
   next24Hours(new Date()).forEach(function(hour) {
@@ -448,14 +448,14 @@ function recommendClothes(weather) {
 /* When the user clicks the change rules link, shows rules */
 document.querySelector("#rulesLink").addEventListener("click", function(event) {
   event.preventDefault();
-  showRules();
+  showEditRulesView();
 });
 
 /** 
  * Deletes any existing rule elements on the page
  * and creates new ones from the rules variable. 
  */
-function showRules() {
+function showEditRulesView() {
   removeRules(); 
   enterLocationView.style.display = "none";
   mainView.style.display = "none";
