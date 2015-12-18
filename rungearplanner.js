@@ -1,48 +1,33 @@
-/* Creates page elements for the zip code entry view. */
+/* Assigns variables to page elements accessed throughout code. */
 var enterLocationView = document.querySelector("#enterLocationView");
 var zipCodeInput = document.querySelector("#zipCode")
-var setLocationButton = document.querySelector("#setLocation");
-var errorDiv = document.querySelector("#error");
-
-/* Creates page elements for the main view. */
 var mainView = document.querySelector("#mainView");
-var locationDiv = document.querySelector("#location");
 var cityLink = document.querySelector("#city");
 var timeSelect = document.querySelector("#time");
-var nowOption = document.querySelector("#now");
-var weatherDiv = document.querySelector("#weather");
-var rulesLink = document.querySelector("#rulesLink");
-var clothesDiv = document.querySelector("#clothes");
-
-/* Creates page elements for the edit rules view. */
 var editRulesView = document.querySelector("#editRulesView");
-var thermometerDiv = document.querySelector("#thermometer");
 var rulesDiv = document.querySelector("#rules");
-var addRuleDiv = document.querySelector("#addRule");
-var addRuleLink = document.querySelector("#addRuleLink");
-addRuleLink.addEventListener("click", function(event) {
+
+/* When user clicks add rule link, adds rule */
+document.querySelector("#addRuleLink").addEventListener("click", function(event) {
   event.preventDefault();
   buildRule(new Item("new item"), rules.length);
   var newRuleCriteriaDiv = document.querySelector("#clothingCriteria" + rules.length);
   newRuleCriteriaDiv.style.display = "block";
 });
 
-var rulesButtonsDiv = document.querySelector("#rulesButtons");
-var saveButton = document.querySelector("#save");
-saveButton.addEventListener("click", function() {
+/* Adds functionality to save, cancel, and reset buttons */
+document.querySelector("#save").addEventListener("click", function() {
   saveRules();
   showPlanner();
   update();
 });
 
-var cancelButton = document.querySelector("#cancel");
-cancelButton.addEventListener("click", function() {
+document.querySelector("#cancel").addEventListener("click", function() {
   showPlanner();
   update();
 });
 
-var resetButton = document.querySelector("#reset");
-resetButton.addEventListener("click", function() {
+document.querySelector("#reset").addEventListener("click", function() {
   resetRules();
   showPlanner();
   update();
@@ -195,7 +180,7 @@ if (savedZip) {
  * When the user clicks the set location button, saves 
  * zip code to local storage and shows the planner. 
  */
-setLocationButton.addEventListener("click", function(event) {
+document.querySelector("#setLocation").addEventListener("click", function(event) {
   event.preventDefault();
   if (update()) {
     localStorage.setItem("zipCode", zipCodeInput.value);
@@ -224,6 +209,8 @@ cityLink.addEventListener("click", function(event) {
  * elements on the page based on the user's inputs.
  */
 function update() {
+  var errorDiv = document.querySelector("#error");
+  var clothesDiv = document.querySelector("#clothes");
   try {
     if (!weatherInZip) {
       if (zipCodeInput.value.match(/^\d{5}$/)) {
@@ -239,10 +226,11 @@ function update() {
       weatherIconClass += "night-";
     }
     weatherIconClass += weather.icon;
-    weatherDiv.innerHTML = "<div id='cond'><i class='" + weatherIconClass + "'></i></div>" +
-                           "<div id='temp'>" + weather.temp + "&deg;F</div>" +
-                           "<div id='wind'>" + weather.wind + " mph</div>" +
-                           "<div id='timeOutput'>" + weather.time + "</div>";
+    document.querySelector("#weather").innerHTML = 
+      "<div id='cond'><i class='" + weatherIconClass + "'></i></div>" +
+      "<div id='temp'>" + weather.temp + "&deg;F</div>" +
+      "<div id='wind'>" + weather.wind + " mph</div>" +
+      "<div id='timeOutput'>" + weather.time + "</div>";
     var clothesList = document.createElement("ul");
     clothesDiv.textContent = "";
     clothesDiv.appendChild(clothesList);
@@ -290,14 +278,9 @@ function showPlanner() {
 
 /* Removes all options from time select and rebuilds now option */
 function resetTimeOptions() {
-  while (timeSelect.firstChild) {
-    timeSelect.removeChild(timeSelect.firstChild);
+  while (timeSelect.childElementCount > 1) {
+    timeSelect.removeChild(timeSelect.lastChild);
   }
-
-  var nowOption = document.createElement("option");
-  nowOption.textContent = "Now";
-  nowOption.value = "now";
-  timeSelect.appendChild(nowOption);
 }
 
 /** 
@@ -463,7 +446,7 @@ function recommendClothes(weather) {
 }
 
 /* When the user clicks the change rules link, shows rules */
-rulesLink.addEventListener("click", function(event) {
+document.querySelector("#rulesLink").addEventListener("click", function(event) {
   event.preventDefault();
   showRules();
 });
