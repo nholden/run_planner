@@ -2,7 +2,6 @@
 var enterLocationView = document.querySelector("#enterLocationView");
 var zipCodeInput = document.querySelector("#zipCode");
 var mainView = document.querySelector("#mainView");
-var cityLink = document.querySelector("#city");
 var timeSelect = document.querySelector("#time");
 var editRulesView = document.querySelector("#editRulesView");
 var rulesDiv = document.querySelector("#rules");
@@ -114,6 +113,26 @@ function getWeatherAtTime(data, time) {
   return weather;
 }
 
+/* Sets settings menu to closed by defaut */
+var settingsOpen = false;
+
+/* Toggles settings menu */
+function toggleSettings() {
+  var settings = document.querySelector("#settings");
+  if (settingsOpen) {
+    settings.style.display = "none";
+    settingsOpen = false;
+  } else {
+    settings.style.display = "block";
+    settingsOpen = true;
+  }
+}
+
+/* Toggles settings menu when button */
+document.querySelector("#settingsButton").addEventListener("click", function() {
+  toggleSettings();
+});
+    
 /* Shows page elements associated with entering location. */
 function showEnterLocationView() {
   resetTimeOptions();
@@ -230,7 +249,7 @@ function update() {
       }
     }
     var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
-    cityLink.textContent = weather.city;
+    document.querySelector("#city").textContent = weather.city;
     var weatherIconClass = "wi wi-wu-";
     if (!weather.isDay) {
       weatherIconClass += "night-";
@@ -296,17 +315,19 @@ function recommendClothes(weather) {
  * When the user clicks name of city, removes zip code
  * from local storage and shows enter location view.
  */
-cityLink.addEventListener("click", function(event) {
+document.querySelector("#location").addEventListener("click", function(event) {
   event.preventDefault();
   localStorage.removeItem("zipCode");
   weatherInZip = null;
   showEnterLocationView();
+  toggleSettings();
 });
 
 /* When the user clicks the change rules link, shows edit rules view */
 document.querySelector("#rulesLink").addEventListener("click", function(event) {
   event.preventDefault();
   showEditRulesView();
+  toggleSettings();
 });
 
 /* Shows edit rules view and rebuilds rule page elements from rules variable */

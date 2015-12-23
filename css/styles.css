@@ -27,13 +27,22 @@ body {
   padding: 0.5em;
 }
 
+#city {
+  padding: 0.5em;
+}
+
 #settingsButton {
   position: absolute;
   right: 0;
   text-align: right;
 }
 
+#settingsButton:hover {
+  cursor: pointer;
+}
+
 #settings {
+  display: none;
   text-align: right;
 }
 
@@ -77,7 +86,6 @@ div {
 
 a {
   color: #000000;
-  font-weight: 400;
   text-decoration: none;
 }
 
@@ -87,12 +95,6 @@ a {
 
 #enterLocationView {
   white-space: nowrap;
-}
-
-#location {
-  text-align: center;
-  font-size: 2em;
-  margin-bottom: 0.25em;
 }
 
 #zipCode {
