@@ -5,10 +5,20 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link rel="stylesheet" type="text/css" href="css/weather-icons.css">
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Run Gear Planner</title>
   </head>
   <body>
+    <div id="header">
+      <div id="title">Run Gear Planner</div><div id="settingsButton"><i class="fa fa-cog"></i></div>
+    </div>
+    <div id="settings">
+      <ul id="settingsList">
+        <li><a href id="city"></a></li>
+        <li><a href id="rulesLink">Edit clothing preferences</a></li>
+      </ul>
+    </div>
     <div id="container">
       <div id="enterLocationView">
         <input type="text" id="zipCode" placeholder="Zip code">
@@ -16,12 +26,11 @@
         <div id="error"></div>
       </div>
       <div id="mainView">
-        <div id="location">Running in: <a href id="city"></a></div>
         <select id="time">
           <option value="now" id="now">Now</option>
         </select>
         <div id="weather"></div>
-        <a href id="rulesLink">You should wear:</a>
+        <div>You should wear:</div>
         <div id="clothes"></div>
       </div>
       <div id="editRulesView">
