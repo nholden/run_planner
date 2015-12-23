@@ -257,12 +257,11 @@ function update() {
     }
     weatherIconClass += weather.icon;
     document.querySelector("#weather").innerHTML = 
-      "<div id='cond'><i class='" + weatherIconClass + "'></i></div>" +
       "<div id='temp'>" + weather.temp + "&deg;F</div>" +
-      "<div id='wind'>" + weather.wind + " mph</div>" +
-      "<div id='timeOutput'>" + weather.time + "</div>";
+      "<div id='cond'><i class='" + weatherIconClass + "'></i></div>" +
+      "<div id='wind'>" + weather.wind + " mph</div>";
     var clothesList = document.createElement("ul");
-    clothesDiv.textContent = "";
+    clothesDiv.textContent = "You should wear:";
     clothesDiv.appendChild(clothesList);
     var clothes = recommendClothes(weather);
     clothes.forEach(function(clothesItem) {
