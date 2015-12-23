@@ -5,6 +5,7 @@ var mainView = document.querySelector("#mainView");
 var timeSelect = document.querySelector("#time");
 var editRulesView = document.querySelector("#editRulesView");
 var rulesDiv = document.querySelector("#rules");
+var citySpan = document.querySelector("#city");
 
 /** 
  * Checks local storage for saved rules.
@@ -128,7 +129,7 @@ function toggleSettings() {
   }
 }
 
-/* Toggles settings menu when button */
+/* Toggles settings menu when button clicked */
 document.querySelector("#settingsButton").addEventListener("click", function() {
   toggleSettings();
 });
@@ -249,7 +250,7 @@ function update() {
       }
     }
     var weather = getWeatherAtTime(weatherInZip, timeSelect.value);
-    document.querySelector("#city").textContent = weather.city;
+    citySpan.textContent = weather.city;
     var weatherIconClass = "wi wi-wu-";
     if (!weather.isDay) {
       weatherIconClass += "night-";
@@ -320,6 +321,7 @@ document.querySelector("#location").addEventListener("click", function(event) {
   localStorage.removeItem("zipCode");
   weatherInZip = null;
   showEnterLocationView();
+  citySpan.textContent = "";
   toggleSettings();
 });
 
