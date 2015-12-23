@@ -352,22 +352,37 @@ document.querySelector("#addRuleLink").addEventListener("click", function(event)
   newRuleCriteriaDiv.style.display = "block";
 });
 
-/* Adds functionality to save, cancel, and reset buttons */
+/** 
+ * Adds functionality to save, cancel, and reset buttons. When weather data 
+ * exists, returns to main view. Otherwise, returns to enter location view.
+ */
 document.querySelector("#save").addEventListener("click", function() {
   saveRules();
-  showMainView();
-  update();
+  if (weatherInZip) {
+    showMainView();
+    update();
+  } else {
+    showEnterLocationView();
+  }
 });
 
 document.querySelector("#cancel").addEventListener("click", function() {
-  showMainView();
-  update();
+  if (weatherInZip) {
+    showMainView();
+    update();
+  } else {
+    showEnterLocationView();
+  }
 });
 
 document.querySelector("#reset").addEventListener("click", function() {
   resetRules();
-  showMainView();
-  update();
+  if (weatherInZip) {
+    showMainView();
+    update();
+  } else {
+    showEnterLocationView();
+  }
 });
 
 /* Resets rules to default. */
