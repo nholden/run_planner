@@ -109,9 +109,12 @@ a {
   width: 60%;
 }
 
-#weather, #enterLocationView {
-  text-align: center;
+#weather, #enterLocationView, #editRulesView {
   margin: 2em 0;
+}
+
+#weather {
+  text-align: center;
 }
 
 #clothes, #time {

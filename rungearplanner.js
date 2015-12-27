@@ -347,6 +347,9 @@ function showEditRulesView() {
 document.querySelector("#addRuleLink").addEventListener("click", function(event) {
   event.preventDefault();
   buildRule(new Item("new item"), rules.length);
+  var allRuleBarDivs = document.querySelectorAll(".clothingBar");
+  var newRuleBarDiv = allRuleBarDivs[allRuleBarDivs.length - 1];
+  newRuleBarDiv.getElementsByTagName("i")[0].className = "fa fa-caret-down";
   var newRuleCriteriaDiv = document.querySelector("#clothingCriteria" + rules.length);
   newRuleCriteriaDiv.style.display = "block";
 });
@@ -523,9 +526,14 @@ function buildRule(item, index) {
 
   var itemBarDiv = document.createElement("div");
   itemBarDiv.className = "clothingBar";
-  itemBarDiv.textContent = item.name;
   updateItemBarBG(item.minFeel, item.maxFeel);
   itemDiv.appendChild(itemBarDiv);
+
+  var itemBarCaret = document.createElement("i");
+  itemBarCaret.className = "fa fa-caret-right";
+  itemBarDiv.appendChild(itemBarCaret);
+
+  itemBarDiv.innerHTML += " " + item.name;
 
 /** 
  * Given a minimum feel temp and a maximum feel temp,
@@ -612,7 +620,7 @@ function buildRule(item, index) {
   var deleteDiv = document.createElement("div");
   itemCriteriaDiv.appendChild(deleteDiv);
   var deleteLink = document.createElement("a");
-  deleteLink.textContent = "Delete";
+  deleteLink.innerHTML = "<i class='fa fa-minus'></i> Delete";
   deleteLink.href = "";
   deleteDiv.appendChild(deleteLink);
   deleteLink.addEventListener("click", function(event) {
@@ -622,11 +630,14 @@ function buildRule(item, index) {
 
   itemBarDiv.addEventListener("click", function() {
     var allItemCriteriaDivs = document.querySelectorAll(".clothingCriteria");
+    var allItemBarDivs = document.querySelectorAll(".clothingBar");
     var wasHidden = itemCriteriaDiv.style.display == "none";
     for (var i = 0; i < allItemCriteriaDivs.length; i++) {
       allItemCriteriaDivs[i].style.display = "none";
+      allItemBarDivs[i].getElementsByTagName("i")[0].className = "fa fa-caret-right";
     }
     if (wasHidden) {
+      this.getElementsByTagName("i")[0].className = "fa fa-caret-down";
       itemCriteriaDiv.style.display = "block";
     }
   });
