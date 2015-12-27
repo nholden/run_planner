@@ -109,7 +109,7 @@ a {
   width: 60%;
 }
 
-#weather {
+#weather, #enterLocationView {
   text-align: center;
   margin: 2em 0;
 }
